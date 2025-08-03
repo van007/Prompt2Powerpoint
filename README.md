@@ -273,13 +273,10 @@ Custom slides: Add specific client case studies using the + button
 
 ## 🌟 Latest Updates
 
-- **Enhanced Image Search**: 2-word query optimization for better relevance
-- **Smart Caching**: 15-minute cache with failure tracking
-- **Rate Limiting**: Robust queue system (180 requests/hour)
 - **Theme System**: 5 professional themes with custom fonts
 - **Single Slide Addition**: Context-aware custom slide insertion
 - **Multi-Provider Support**: Seamless switching between local and cloud
-- **Improved Layouts**: 4 image layout options including background mode
+- **Improved Layouts**: Image layout options including background mode
 
 ## 📁 Project Structure
 
