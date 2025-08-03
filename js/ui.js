@@ -1,0 +1,956 @@
+/**
+ * UI Handler for managing user interface interactions
+ */
+class UiHandler {
+    constructor() {
+        // DOM elements
+        this.elements = {
+            promptInput: document.getElementById('prompt-input'),
+            generateBtn: document.getElementById('generate-btn'),
+            complexitySelect: document.getElementById('complexity-select'),
+            slidesSelect: document.getElementById('slides-select'),
+            themeSelect: document.getElementById('theme-select'),
+            uploadArea: document.getElementById('upload-area'),
+            fileInput: document.getElementById('file-input'),
+            browseBtn: document.getElementById('browse-btn'),
+            fileList: document.getElementById('file-list'),
+            modelSelect: document.getElementById('model-select'),
+            connectionStatus: document.getElementById('connection-status'),
+            progressSection: document.getElementById('progress-section'),
+            progressBar: document.getElementById('progress-bar'),
+            progressPercentage: document.getElementById('progress-percentage'),
+            resultSection: document.getElementById('result-section'),
+            presentationPreview: document.getElementById('presentation-preview'),
+            downloadBtn: document.getElementById('download-btn'),
+            
+            // Theme preview elements
+            themePreview: document.getElementById('theme-preview'),
+            headingFontPreview: document.getElementById('heading-font-preview'),
+            bodyFontPreview: document.getElementById('body-font-preview'),
+            primaryColorSwatch: document.getElementById('primary-color-swatch'),
+            secondaryColorSwatch: document.getElementById('secondary-color-swatch'),
+            textColorSwatch: document.getElementById('text-color-swatch'),
+            backgroundColorSwatch: document.getElementById('background-color-swatch'),
+            accentColorSwatch: document.getElementById('accent-color-swatch'),
+            
+            // Settings elements
+            settingsBtn: document.getElementById('settings-btn'),
+            urlSettingsModal: document.getElementById('url-settings-modal'),
+            closeModalBtn: document.getElementById('close-modal'),
+            urlForm: document.getElementById('url-form'),
+            baseUrlInput: document.getElementById('base-url-input'),
+            resetUrlBtn: document.getElementById('reset-url-btn'),
+            
+            // Provider settings elements
+            providerLocal: document.getElementById('provider-local'),
+            providerOpenRouter: document.getElementById('provider-openrouter'),
+            localSettings: document.getElementById('local-settings'),
+            openRouterSettings: document.getElementById('openrouter-settings'),
+            apiKeyInput: document.getElementById('api-key-input'),
+            
+            // Image layout elements
+            layoutNone: document.getElementById('layout-none'),
+            layoutFullWidth: document.getElementById('layout-full-width'),
+            layoutSideBySide: document.getElementById('layout-side-by-side'),
+            layoutTextFocus: document.getElementById('layout-text-focus'),
+            layoutBackground: document.getElementById('layout-background'),
+            
+            // Real images toggle
+            useRealImagesToggle: document.getElementById('use-real-images'),
+            imageTypeDescription: document.getElementById('image-type-description'),
+            placeholderDesc: document.querySelector('.placeholder-desc'),
+            realImagesDesc: document.querySelector('.real-images-desc'),
+            
+            // Pexels API
+            pexelsApiKeyInput: document.getElementById('pexels-api-key-input')
+        };
+        
+        // Event handlers
+        this.setupEventListeners();
+        
+        // Initialize URL field with current value
+        this.initializeUrlField();
+        
+        // Store the insertion position for new slides
+        this.slideInsertPosition = 0;
+    }
+
+    /**
+     * Set up all event listeners
+     */
+    setupEventListeners() {
+        // Generate button
+        this.elements.generateBtn.addEventListener('click', () => {
+            this.onGenerateClicked();
+        });
+        
+        // File upload via button
+        this.elements.browseBtn.addEventListener('click', () => {
+            this.elements.fileInput.click();
+        });
+        
+        // File input change
+        this.elements.fileInput.addEventListener('change', (e) => {
+            this.handleFileUpload(e.target.files);
+        });
+        
+        // Drag and drop
+        this.elements.uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            this.elements.uploadArea.classList.add('dragover');
+        });
+        
+        this.elements.uploadArea.addEventListener('dragleave', () => {
+            this.elements.uploadArea.classList.remove('dragover');
+        });
+        
+        this.elements.uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            this.elements.uploadArea.classList.remove('dragover');
+            this.handleFileUpload(e.dataTransfer.files);
+        });
+        
+        // Download button
+        this.elements.downloadBtn.addEventListener('click', () => {
+            this.onDownloadClicked();
+        });
+        
+        // Model selection
+        this.elements.modelSelect.addEventListener('change', () => {
+            this.onModelSelected();
+        });
+        
+        // Theme selection
+        this.elements.themeSelect.addEventListener('change', () => {
+            this.onThemeSelected();
+        });
+        
+        // Enter key in prompt input
+        this.elements.promptInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                this.onGenerateClicked();
+            }
+        });
+        
+        // Settings button - open modal
+        this.elements.settingsBtn.addEventListener('click', () => {
+            this.openUrlSettingsModal();
+        });
+        
+        // Close modal button
+        this.elements.closeModalBtn.addEventListener('click', () => {
+            this.closeUrlSettingsModal();
+        });
+        
+        // Click outside modal to close
+        this.elements.urlSettingsModal.addEventListener('click', (e) => {
+            if (e.target === this.elements.urlSettingsModal) {
+                this.closeUrlSettingsModal();
+            }
+        });
+        
+        // URL form submission
+        this.elements.urlForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.saveBaseUrl();
+        });
+        
+        // Reset URL button
+        this.elements.resetUrlBtn.addEventListener('click', () => {
+            this.resetBaseUrl();
+        });
+        
+        // Provider radio buttons
+        this.elements.providerLocal.addEventListener('change', () => {
+            this.onProviderChanged();
+        });
+        
+        this.elements.providerOpenRouter.addEventListener('change', () => {
+            this.onProviderChanged();
+        });
+        
+        // Add slide modal handlers
+        this.setupAddSlideModalHandlers();
+        
+        // Real images toggle
+        if (this.elements.useRealImagesToggle) {
+            this.elements.useRealImagesToggle.addEventListener('change', () => {
+                this.onImageTypeToggled();
+            });
+        }
+        
+        // Initialize real images toggle state
+        this.onImageTypeToggled();
+    }
+    
+    /**
+     * Initialize the URL input field with the current base URL
+     */
+    initializeUrlField() {
+        // Get current URL from API client
+        const currentUrl = apiClient.baseUrl;
+        if (currentUrl) {
+            this.elements.baseUrlInput.value = currentUrl;
+        }
+        
+        // Set provider radio button
+        if (apiClient.provider === 'openrouter') {
+            this.elements.providerOpenRouter.checked = true;
+        } else {
+            this.elements.providerLocal.checked = true;
+        }
+        
+        // Set API key if available
+        if (apiClient.openRouterApiKey) {
+            this.elements.apiKeyInput.value = apiClient.openRouterApiKey;
+        }
+        
+        // Set Pexels API key if available
+        const savedPexelsKey = pexelsClient.loadSavedApiKey();
+        if (savedPexelsKey && this.elements.pexelsApiKeyInput) {
+            this.elements.pexelsApiKeyInput.value = savedPexelsKey;
+        }
+        
+        // Show/hide appropriate settings
+        this.onProviderChanged();
+    }
+    
+    /**
+     * Handle provider change
+     */
+    onProviderChanged() {
+        const isOpenRouter = this.elements.providerOpenRouter.checked;
+        
+        if (isOpenRouter) {
+            this.elements.localSettings.style.display = 'none';
+            this.elements.openRouterSettings.style.display = 'block';
+        } else {
+            this.elements.localSettings.style.display = 'block';
+            this.elements.openRouterSettings.style.display = 'none';
+        }
+    }
+    
+    /**
+     * Open the URL settings modal
+     */
+    openUrlSettingsModal() {
+        this.elements.urlSettingsModal.classList.add('active');
+    }
+    
+    /**
+     * Close the URL settings modal
+     */
+    closeUrlSettingsModal() {
+        this.elements.urlSettingsModal.classList.remove('active');
+    }
+    
+    /**
+     * Save the base URL and update the API client
+     */
+    async saveBaseUrl() {
+        // Get provider selection
+        const isOpenRouter = this.elements.providerOpenRouter.checked;
+        const provider = isOpenRouter ? 'openrouter' : 'local';
+        
+        // Update provider
+        apiClient.setProvider(provider);
+        
+        // Validate based on provider
+        if (provider === 'local') {
+            const newUrl = this.elements.baseUrlInput.value.trim();
+            
+            if (!newUrl) {
+                this.showError('Please enter a valid URL');
+                return;
+            }
+            
+            // Update the base URL for local provider
+            await apiClient.setBaseUrl(newUrl);
+        } else {
+            // OpenRouter
+            const apiKey = this.elements.apiKeyInput.value.trim();
+            
+            if (!apiKey) {
+                this.showError('Please enter your OpenRouter API key');
+                return;
+            }
+            
+            // Update API key
+            apiClient.setOpenRouterApiKey(apiKey);
+        }
+        
+        // Save Pexels API key if provided
+        const pexelsApiKey = this.elements.pexelsApiKeyInput.value.trim();
+        if (pexelsApiKey) {
+            pexelsClient.setApiKey(pexelsApiKey);
+        }
+        
+        // Show loading
+        this.showLoading(`Connecting to ${provider === 'openrouter' ? 'OpenRouter' : 'LLM server'}...`);
+        
+        try {
+            // Test connection
+            const success = await apiClient.checkConnection();
+            
+            this.hideLoading();
+            
+            if (success) {
+                this.showSuccess(`Connected to ${provider === 'openrouter' ? 'OpenRouter' : 'LLM server'} successfully`);
+                this.closeUrlSettingsModal();
+                
+                // Update connection status
+                this.updateConnectionStatus('Connected');
+                
+                // Reload models
+                const models = await apiClient.getModels();
+                if (models.length > 0) {
+                    // Remember current selection before repopulating
+                    const currentSelection = apiClient.getSelectedModel();
+                    
+                    this.populateModelSelect(models);
+                    
+                    // Restore selection if still available
+                    if (currentSelection && models.some(m => m.id === currentSelection)) {
+                        this.elements.modelSelect.value = currentSelection;
+                    }
+                }
+            } else {
+                this.showError(`Failed to connect to ${provider === 'openrouter' ? 'OpenRouter' : 'LLM server'}. Please check your settings and try again.`);
+            }
+        } catch (error) {
+            this.hideLoading();
+            this.showError(`Error connecting to ${provider === 'openrouter' ? 'OpenRouter' : 'LLM server'}: ` + error.message);
+        }
+    }
+    
+    /**
+     * Reset the base URL to default
+     */
+    async resetBaseUrl() {
+        // Reset to local provider with default URL
+        this.elements.providerLocal.checked = true;
+        this.elements.baseUrlInput.value = 'http://127.0.0.1:1234';
+        this.elements.apiKeyInput.value = '';
+        
+        // Show local settings
+        this.onProviderChanged();
+        
+        // Save the default settings
+        await this.saveBaseUrl();
+    }
+
+    /**
+     * Handle file upload
+     * @param {FileList} files - Uploaded files
+     */
+    handleFileUpload(files) {
+        if (!files || files.length === 0) return;
+        
+        const newFiles = fileHandler.addFiles(files);
+        this.updateFileList();
+        
+        // Reset file input
+        this.elements.fileInput.value = '';
+    }
+
+    /**
+     * Update the file list display
+     */
+    updateFileList() {
+        const files = fileHandler.getFiles();
+        this.elements.fileList.innerHTML = '';
+        
+        files.forEach((file, index) => {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            
+            const fileIcon = file.type === 'application/pdf' ? 'fa-file-pdf' : 'fa-file-lines';
+            
+            fileItem.innerHTML = `
+                <div class="file-name">
+                    <i class="fas ${fileIcon}"></i>
+                    <span>${file.name}</span>
+                </div>
+                <button class="remove-file" data-index="${index}">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            // Add remove button handler
+            const removeBtn = fileItem.querySelector('.remove-file');
+            removeBtn.addEventListener('click', () => {
+                fileHandler.removeFile(index);
+                this.updateFileList();
+            });
+            
+            this.elements.fileList.appendChild(fileItem);
+        });
+    }
+
+    /**
+     * Populate model selection dropdown
+     * @param {Array} models - Available models
+     */
+    populateModelSelect(models) {
+        const select = this.elements.modelSelect;
+        
+        // Clear existing options
+        select.innerHTML = '<option value="" disabled selected>Select Model</option>';
+        
+        // Add new options
+        models.forEach(model => {
+            const option = document.createElement('option');
+            option.value = model.id;
+            option.textContent = model.id;
+            select.appendChild(option);
+        });
+        
+        // Enable the select
+        select.disabled = false;
+    }
+
+    /**
+     * Update connection status display
+     * @param {string} status - Connection status
+     */
+    updateConnectionStatus(status) {
+        const element = this.elements.connectionStatus;
+        element.textContent = status;
+        element.className = '';
+        
+        switch (status.toLowerCase()) {
+            case 'connected':
+                element.classList.add('connected');
+                break;
+            case 'disconnected':
+                element.classList.add('disconnected');
+                break;
+            case 'connecting':
+                element.classList.add('connecting');
+                break;
+        }
+    }
+
+    /**
+     * Update progress display
+     * @param {number} percentage - Progress percentage (0-100)
+     */
+    updateProgress(percentage) {
+        this.elements.progressBar.style.width = `${percentage}%`;
+        this.elements.progressPercentage.textContent = `${percentage}%`;
+        
+        // Show progress section if not already visible
+        this.elements.progressSection.style.display = 'block';
+        
+        // If this is the first update (0%), scroll to the progress section
+        if (percentage === 0) {
+            this.scrollToElement(this.elements.progressSection);
+        }
+        
+        // If complete, hide after a delay
+        if (percentage >= 100) {
+            setTimeout(() => {
+                this.elements.progressSection.style.display = 'none';
+            }, 1000);
+        }
+    }
+    
+    /**
+     * Disable the generate button during processing
+     */
+    disableGenerateButton() {
+        this.elements.generateBtn.disabled = true;
+        this.elements.generateBtn.classList.add('disabled');
+    }
+    
+    /**
+     * Enable the generate button when processing is complete
+     */
+    enableGenerateButton() {
+        this.elements.generateBtn.disabled = false;
+        this.elements.generateBtn.classList.remove('disabled');
+    }
+    
+    /**
+     * Scroll to a specific element
+     * @param {HTMLElement} element - Element to scroll to
+     */
+    scrollToElement(element) {
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    /**
+     * Display presentation preview
+     * @param {Array} slides - Slide preview data
+     */
+    displayPreview(slides) {
+        const container = this.elements.presentationPreview;
+        container.innerHTML = '';
+        
+        slides.forEach((slide, index) => {
+            // Create slide row container
+            const slideRow = document.createElement('div');
+            slideRow.className = 'slide-row';
+            
+            // Add plus icon after title slide (index 0) to insert first content slide
+            if (index === 0) {
+                // This is the title slide - add plus icon after it
+                const afterTitleIcon = this.createPlusIcon(0); // Position 0 in content slides
+                slideRow.appendChild(afterTitleIcon);
+            }
+            
+            // Create slide preview
+            const slidePreview = document.createElement('div');
+            slidePreview.className = 'slide-preview';
+            
+            // Create a more detailed preview with actual content
+            const slideContent = document.createElement('div');
+            slideContent.className = 'slide-content';
+            
+            // Add slide title
+            const slideTitle = document.createElement('div');
+            slideTitle.className = 'slide-title';
+            slideTitle.textContent = slide.title || `Slide ${index + 1}`;
+            
+            // Add slide content (first bullet point or truncated)
+            const contentPreview = document.createElement('div');
+            contentPreview.className = 'slide-content-preview';
+            
+            if (slide.content && slide.content.length > 0) {
+                // Show the first content item, truncated if needed
+                const firstItem = slide.content[0];
+                contentPreview.textContent = firstItem.length > 30 ? 
+                    firstItem.substring(0, 30) + '...' : 
+                    firstItem;
+                    
+                // Add a count if there are more items
+                if (slide.content.length > 1) {
+                    const itemCount = document.createElement('div');
+                    itemCount.className = 'item-count';
+                    itemCount.textContent = `+${slide.content.length - 1} more`;
+                    contentPreview.appendChild(itemCount);
+                }
+            }
+            
+            // Add slide number
+            const slideNumber = document.createElement('div');
+            slideNumber.className = 'slide-number';
+            slideNumber.textContent = `${index + 1}`;
+            
+            // Assemble the preview
+            slideContent.appendChild(slideTitle);
+            slideContent.appendChild(contentPreview);
+            
+            slidePreview.appendChild(slideContent);
+            slidePreview.appendChild(slideNumber);
+            
+            // Add a tooltip with more complete slide info
+            slidePreview.title = `${slide.title}\n${Array.isArray(slide.content) ? slide.content.join('\n') : slide.content || ''}`;
+            
+            // Add click handler to show full slide details
+            slidePreview.addEventListener('click', () => {
+                this.showSlideDetails(slide, index + 1);
+            });
+            
+            // Add slide to row
+            slideRow.appendChild(slidePreview);
+            
+            // Add plus icon after content slides (not after title or closing slide)
+            if (index > 0 && index < slides.length - 1) {
+                // This is a content slide - add plus icon after it
+                // Position in content slides array = index - 1 (content slide position) + 1 (after position)
+                const contentPosition = index - 1 + 1; // = index
+                const afterContentIcon = this.createPlusIcon(contentPosition);
+                slideRow.appendChild(afterContentIcon);
+            }
+            
+            container.appendChild(slideRow);
+        });
+        
+        // Show result section
+        this.elements.resultSection.style.display = 'block';
+    }
+
+    /**
+     * Show an error message
+     * @param {string} message - Error message
+     * @param {string} title - Error title
+     */
+    showError(message, title = 'Error') {
+        Swal.fire({
+            title: title,
+            text: message,
+            icon: 'error',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#2D5BFF'
+        });
+    }
+
+    /**
+     * Show a success message
+     * @param {string} message - Success message
+     * @param {string} title - Success title
+     */
+    showSuccess(message, title = 'Success') {
+        Swal.fire({
+            title: title,
+            text: message,
+            icon: 'success',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#2D5BFF'
+        });
+    }
+
+    /**
+     * Show a loading indicator
+     * @param {string} message - Loading message to display
+     */
+    showLoading(message = 'Loading...') {
+        Swal.fire({
+            title: message,
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+    }
+
+    /**
+     * Hide the loading indicator
+     */
+    hideLoading() {
+        Swal.close();
+    }
+
+    /**
+     * Validate input fields before generation
+     * @returns {boolean} - Whether inputs are valid
+     */
+    validateInputs() {
+        const prompt = this.elements.promptInput.value.trim();
+        const complexity = this.elements.complexitySelect.value;
+        const slideCount = this.elements.slidesSelect.value;
+        const modelId = this.elements.modelSelect.value;
+        const theme = this.elements.themeSelect.value;
+        
+        if (!prompt) {
+            this.showError('Please enter a presentation prompt');
+            return false;
+        }
+        
+        if (!complexity) {
+            this.showError('Please select a complexity level');
+            return false;
+        }
+        
+        if (!theme) {
+            this.showError('Please select a presentation theme');
+            return false;
+        }
+        
+        if (!slideCount) {
+            this.showError('Please select the number of slides');
+            return false;
+        }
+        
+        if (!modelId) {
+            this.showError('Please select a model');
+            return false;
+        }
+        
+        return true;
+    }
+
+    /**
+     * Get user input values
+     * @returns {object} - User input values
+     */
+    getInputValues() {
+        return {
+            prompt: this.elements.promptInput.value.trim(),
+            complexity: this.elements.complexitySelect.value,
+            slideCount: parseInt(this.elements.slidesSelect.value, 10),
+            modelId: this.elements.modelSelect.value,
+            theme: this.elements.themeSelect.value,
+            imageLayout: this.getSelectedImageLayout(),
+            useRealImages: this.getUseRealImages()
+        };
+    }
+    
+    /**
+     * Get the selected image layout
+     * @returns {string} - Selected layout type or 'none'
+     */
+    getSelectedImageLayout() {
+        // Find the checked radio button
+        const checkedRadio = document.querySelector('input[name="image-layout"]:checked');
+        return checkedRadio ? checkedRadio.value : 'none';
+    }
+
+    /**
+     * Event handler for generate button
+     */
+    onGenerateClicked() {
+        if (this.validateInputs()) {
+            const event = new CustomEvent('generate', {
+                detail: this.getInputValues()
+            });
+            
+            document.dispatchEvent(event);
+        }
+    }
+
+    /**
+     * Event handler for model selection
+     */
+    onModelSelected() {
+        const modelId = this.elements.modelSelect.value;
+        
+        if (modelId) {
+            const event = new CustomEvent('modelSelected', {
+                detail: { modelId }
+            });
+            
+            document.dispatchEvent(event);
+        }
+    }
+    
+    /**
+     * Event handler for theme selection
+     */
+    onThemeSelected() {
+        const themeName = this.elements.themeSelect.value;
+        
+        if (themeName) {
+            this.updateThemePreview(themeName);
+        } else {
+            this.elements.themePreview.style.display = 'none';
+        }
+    }
+    
+    /**
+     * Update theme preview with selected theme
+     * @param {string} themeName - Name of the selected theme
+     */
+    updateThemePreview(themeName) {
+        const themes = presentationBuilder.themes;
+        const theme = themes[themeName];
+        
+        if (!theme) return;
+        
+        // Show the preview
+        this.elements.themePreview.style.display = 'block';
+        
+        // Update font previews with actual fonts
+        this.elements.headingFontPreview.style.fontFamily = theme.headFontFace;
+        this.elements.headingFontPreview.textContent = `${theme.headFontFace}`;
+        
+        this.elements.bodyFontPreview.style.fontFamily = theme.bodyFontFace;
+        this.elements.bodyFontPreview.textContent = `${theme.bodyFontFace}`;
+        
+        // Update color swatches
+        this.elements.primaryColorSwatch.style.backgroundColor = `#${theme.primaryColor}`;
+        this.elements.secondaryColorSwatch.style.backgroundColor = `#${theme.secondaryColor}`;
+        this.elements.textColorSwatch.style.backgroundColor = `#${theme.textColor}`;
+        this.elements.backgroundColorSwatch.style.backgroundColor = `#${theme.backgroundColor}`;
+        this.elements.accentColorSwatch.style.backgroundColor = `#${theme.accentColor}`;
+    }
+
+    /**
+     * Event handler for download button
+     */
+    onDownloadClicked() {
+        const event = new CustomEvent('download');
+        document.dispatchEvent(event);
+    }
+
+    /**
+     * Set up event listeners for add slide modal
+     */
+    setupAddSlideModalHandlers() {
+        const addSlideModal = document.getElementById('add-slide-modal');
+        const closeAddSlideModal = document.getElementById('close-add-slide-modal');
+        const cancelAddSlideBtn = document.getElementById('cancel-add-slide-btn');
+        const addSlideForm = document.getElementById('add-slide-form');
+        
+        // Close modal button
+        closeAddSlideModal.addEventListener('click', () => {
+            this.closeAddSlideModal();
+        });
+        
+        // Cancel button
+        cancelAddSlideBtn.addEventListener('click', () => {
+            this.closeAddSlideModal();
+        });
+        
+        // Click outside modal to close
+        addSlideModal.addEventListener('click', (e) => {
+            if (e.target === addSlideModal) {
+                this.closeAddSlideModal();
+            }
+        });
+        
+        // Form submission
+        addSlideForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handleAddSlideSubmit();
+        });
+    }
+    
+    /**
+     * Create a plus icon for adding slides
+     * @param {number} position - Position where the slide should be inserted
+     * @returns {HTMLElement} - Plus icon element
+     */
+    createPlusIcon(position) {
+        const plusIcon = document.createElement('div');
+        plusIcon.className = 'plus-icon';
+        plusIcon.innerHTML = '<i class="fas fa-plus"></i>';
+        plusIcon.title = 'Add new slide';
+        
+        plusIcon.addEventListener('click', () => {
+            this.openAddSlideModal(position);
+        });
+        
+        return plusIcon;
+    }
+    
+    /**
+     * Open the add slide modal
+     * @param {number} position - Position to insert the slide
+     */
+    openAddSlideModal(position) {
+        this.slideInsertPosition = position;
+        const modal = document.getElementById('add-slide-modal');
+        
+        // Clear form fields
+        document.getElementById('slide-title-input').value = '';
+        document.getElementById('slide-description-input').value = '';
+        
+        // Show modal
+        modal.classList.add('active');
+        
+        // Focus on title input
+        document.getElementById('slide-title-input').focus();
+    }
+    
+    /**
+     * Close the add slide modal
+     */
+    closeAddSlideModal() {
+        const modal = document.getElementById('add-slide-modal');
+        modal.classList.remove('active');
+    }
+    
+    /**
+     * Handle add slide form submission
+     */
+    async handleAddSlideSubmit() {
+        const titleInput = document.getElementById('slide-title-input');
+        const descriptionInput = document.getElementById('slide-description-input');
+        
+        const title = titleInput.value.trim();
+        const description = descriptionInput.value.trim();
+        
+        if (!title) {
+            this.showError('Please enter a slide title');
+            return;
+        }
+        
+        try {
+            // Close modal first
+            this.closeAddSlideModal();
+            
+            // Show loading
+            this.showLoading('Generating new slide...');
+            
+            // Trigger slide creation event
+            const event = new CustomEvent('addSlide', {
+                detail: {
+                    title,
+                    description,
+                    position: this.slideInsertPosition
+                }
+            });
+            
+            document.dispatchEvent(event);
+            
+        } catch (error) {
+            this.hideLoading();
+            this.showError('Error creating slide: ' + error.message);
+        }
+    }
+    
+    /**
+     * Handle image type toggle change
+     */
+    onImageTypeToggled() {
+        const useRealImages = this.elements.useRealImagesToggle ? this.elements.useRealImagesToggle.checked : false;
+        
+        // Update description visibility
+        if (this.elements.placeholderDesc && this.elements.realImagesDesc) {
+            this.elements.placeholderDesc.style.display = useRealImages ? 'none' : 'inline';
+            this.elements.realImagesDesc.style.display = useRealImages ? 'inline' : 'none';
+        }
+        
+        // Check if Pexels API key is configured when real images are selected
+        if (useRealImages && !pexelsClient.hasApiKey()) {
+            // Load saved key
+            const savedKey = pexelsClient.loadSavedApiKey();
+            if (!savedKey) {
+                this.showError('Please configure your Pexels API key in settings to use real images', 'API Key Required');
+                // Reset toggle
+                this.elements.useRealImagesToggle.checked = false;
+                this.onImageTypeToggled(); // Recursive call to update UI
+            }
+        }
+    }
+    
+    /**
+     * Get whether to use real images
+     * @returns {boolean}
+     */
+    getUseRealImages() {
+        return this.elements.useRealImagesToggle ? this.elements.useRealImagesToggle.checked : false;
+    }
+    
+    /**
+     * Show detailed slide information in a modal
+     * @param {object} slide - Slide data
+     * @param {number} slideNumber - Slide number
+     */
+    showSlideDetails(slide, slideNumber) {
+        // Format content items as bullet points
+        let contentHtml = '<p>No content</p>';
+        
+        if (slide.content) {
+            if (Array.isArray(slide.content) && slide.content.length > 0) {
+                contentHtml = `<ul>${slide.content.map(item => `<li>${item}</li>`).join('')}</ul>`;
+            } else if (typeof slide.content === 'string') {
+                contentHtml = `<p>${slide.content}</p>`;
+            } else if (typeof slide.content === 'object') {
+                contentHtml = `<p>${JSON.stringify(slide.content)}</p>`;
+            }
+        }
+        
+        // Show slide details in a SweetAlert modal
+        Swal.fire({
+            title: `Slide ${slideNumber}: ${slide.title}`,
+            html: `
+                <div class="slide-details">
+                    <h4>Content:</h4>
+                    ${contentHtml}
+                    ${slide.notes ? `<h4>Notes:</h4><p>${slide.notes}</p>` : ''}
+                </div>
+            `,
+            confirmButtonText: 'Close',
+            confirmButtonColor: '#2D5BFF',
+            width: '600px'
+        });
+    }
+}
+
+// Create and export a singleton instance
+const uiHandler = new UiHandler();

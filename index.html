@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt 2 Powerpoint</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="assets/icon.png" alt="Prompt 2 Powerpoint Logo" class="logo-icon">
+            <h1>Prompt 2 Powerpoint</h1>
+        </div>
+        <div class="settings">
+            <button id="settings-btn" class="settings-btn" title="Settings">
+                <i class="fas fa-cog"></i>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h2>Create presentations with AI</h2>
+                <p>Generate professional presentations from a single prompt. Upload files for context and customize complexity and slide count.</p>
+                
+                <div class="search-container">
+                    <div class="search-input">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="prompt-input" placeholder="Enter your presentation prompt">
+                    </div>
+                    <button id="generate-btn" class="generate-btn">Generate</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="customization">
+            <h3>Customize Your Presentation</h3>
+            
+            <div class="options-row">
+                <div class="option-group">
+                    <label>Complexity Level</label>
+                    <select id="complexity-select">
+                        <option value="" disabled selected>Select Complexity</option>
+                        <option value="simple">Simple</option>
+                        <option value="standard">Standard</option>
+                        <option value="detailed">Detailed</option>
+                    </select>
+                </div>
+                
+                <div class="option-group">
+                    <label>Number of Slides</label>
+                    <select id="slides-select">
+                        <option value="" disabled selected>Select Slides</option>
+                        <option value="5">5 slides</option>
+                        <option value="10">10 slides</option>
+                        <option value="15">15 slides</option>
+                        <option value="20">20 slides</option>
+                    </select>
+                </div>
+                
+                <div class="option-group">
+                    <label>Presentation Theme</label>
+                    <select id="theme-select">
+                        <option value="" disabled selected>Select Theme</option>
+                        <option value="professional">Professional</option>
+                        <option value="modern">Modern</option>
+                        <option value="corporate">Corporate</option>
+                        <option value="creative">Creative</option>
+                        <option value="minimalist">Minimalist</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="theme-preview" id="theme-preview" style="display: none;">
+                <h4>Theme Preview</h4>
+                <div class="theme-details">
+                    <div class="font-preview">
+                        <h5>Fonts</h5>
+                        <div class="font-item">
+                            <span class="font-label">Heading Font:</span>
+                            <span id="heading-font-preview" class="font-sample">Sample Heading Text</span>
+                        </div>
+                        <div class="font-item">
+                            <span class="font-label">Body Font:</span>
+                            <span id="body-font-preview" class="font-sample">Sample body text for presentation content</span>
+                        </div>
+                    </div>
+                    
+                    <div class="color-palette">
+                        <h5>Color Palette</h5>
+                        <div class="color-grid">
+                            <div class="color-item">
+                                <div class="color-swatch" id="primary-color-swatch"></div>
+                                <span class="color-label">Heading</span>
+                            </div>
+                            <div class="color-item">
+                                <div class="color-swatch" id="secondary-color-swatch"></div>
+                                <span class="color-label">Sub-Heading</span>
+                            </div>
+                            <div class="color-item">
+                                <div class="color-swatch" id="text-color-swatch"></div>
+                                <span class="color-label">Text</span>
+                            </div>
+                            <div class="color-item">
+                                <div class="color-swatch" id="background-color-swatch"></div>
+                                <span class="color-label">Background</span>
+                            </div>
+                            <div class="color-item">
+                                <div class="color-swatch" id="accent-color-swatch"></div>
+                                <span class="color-label">Accent</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="image-layouts-section">
+            <h3>Image Layout</h3>
+            
+            <!-- Image Type Toggle -->
+            <div class="image-type-toggle">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="use-real-images" class="toggle-input">
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-label-left">Use Placeholders</span>
+                    <span class="toggle-label-right">Use Real Images</span>
+                </label>
+                <p class="toggle-description" id="image-type-description">
+                    <span class="placeholder-desc">Image placeholders will be added that you can replace later in PowerPoint</span>
+                    <span class="real-images-desc" style="display: none;">Real images will be fetched from Pexels based on slide content</span>
+                </p>
+            </div>
+            
+            <p class="section-description">Select the image layout for all slides in your presentation</p>
+            
+            <div class="image-layouts-container">
+                <div class="layout-option">
+                    <input type="radio" name="image-layout" id="layout-none" class="layout-radio" value="none" checked>
+                    <label for="layout-none" class="layout-label">
+                        <div class="layout-preview no-image-preview">
+                            <div class="preview-text-only"></div>
+                        </div>
+                        <span class="layout-name">No Images</span>
+                        <span class="layout-desc">Text only presentation</span>
+                    </label>
+                </div>
+
+                <div class="layout-option">
+                    <input type="radio" name="image-layout" id="layout-full-width" class="layout-radio" value="full-width">
+                    <label for="layout-full-width" class="layout-label">
+                        <div class="layout-preview full-width-preview">
+                            <div class="preview-image"></div>
+                            <div class="preview-text"></div>
+                        </div>
+                        <span class="layout-name">Full Width</span>
+                        <span class="layout-desc">Image at top, text below (short text)</span>
+                    </label>
+                </div>
+                
+                <div class="layout-option">
+                    <input type="radio" name="image-layout" id="layout-side-by-side" class="layout-radio" value="side-by-side">
+                    <label for="layout-side-by-side" class="layout-label">
+                        <div class="layout-preview side-by-side-preview">
+                            <div class="preview-image"></div>
+                            <div class="preview-text"></div>
+                        </div>
+                        <span class="layout-name">Side by Side</span>
+                        <span class="layout-desc">Image left, text right (balanced)</span>
+                    </label>
+                </div>
+                
+                <div class="layout-option">
+                    <input type="radio" name="image-layout" id="layout-text-focus" class="layout-radio" value="text-focus">
+                    <label for="layout-text-focus" class="layout-label">
+                        <div class="layout-preview text-focus-preview">
+                            <div class="preview-text"></div>
+                            <div class="preview-image"></div>
+                        </div>
+                        <span class="layout-name">Text Focus</span>
+                        <span class="layout-desc">Small image, more text (text-heavy)</span>
+                    </label>
+                </div>
+                
+                <div class="layout-option">
+                    <input type="radio" name="image-layout" id="layout-background" class="layout-radio" value="background">
+                    <label for="layout-background" class="layout-label">
+                        <div class="layout-preview background-preview">
+                            <div class="preview-image-bg"></div>
+                            <div class="preview-text-overlay"></div>
+                        </div>
+                        <span class="layout-name">Background</span>
+                        <span class="layout-desc">Full background with text overlay</span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <section class="upload-section">
+            <h3>Upload Files</h3>
+            <div class="upload-container" id="upload-area">
+                <p>Drag and drop PDF or Text files here, or browse to upload. These files will provide additional context for your presentation.</p>
+                <button id="browse-btn" class="browse-btn">Browse Files</button>
+                <input type="file" id="file-input" accept=".pdf,.txt" multiple hidden>
+            </div>
+            <div id="file-list" class="file-list"></div>
+        </section>
+
+        <section class="model-section">
+            <h3>Choose your LLM Model</h3>
+            <div class="model-selection">
+                <select id="model-select">
+                    <option value="" disabled selected>Select Model</option>
+                    <!-- Models will be populated via JS -->
+                </select>
+            </div>
+            <div class="connection-status">
+                <span id="status-text">Connection Status: </span>
+                <span id="connection-status">Connecting...</span>
+            </div>
+        </section>
+
+        <section class="progress-section" id="progress-section" style="display: none;">
+            <h3>Generating Presentation</h3>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress" id="progress-bar"></div>
+                </div>
+                <div class="progress-text">
+                    <span id="progress-percentage">0%</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="result-section" id="result-section" style="display: none;">
+            <h3>Your Presentation is Ready</h3>
+            <div class="result-container">
+                <div class="presentation-preview" id="presentation-preview">
+                    <!-- Preview thumbnails will be added here -->
+                </div>
+                <div class="download-container">
+                    <button id="download-btn" class="download-btn">
+                        <i class="fas fa-download"></i> Download Presentation
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Prompt 2 Powerpoint</p>
+    </footer>
+
+    <!-- URL Settings Modal -->
+    <div id="url-settings-modal" class="url-settings-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>LLM Server Settings</h3>
+                <button id="close-modal" class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="url-form" class="url-form">
+                    <div class="form-group">
+                        <label>LLM Provider</label>
+                        <div class="provider-options">
+                            <label class="radio-option">
+                                <input type="radio" name="provider" value="local" id="provider-local" checked>
+                                <span>Local LLM Server</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="provider" value="openrouter" id="provider-openrouter">
+                                <span>OpenRouter (Cloud)</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" id="local-settings">
+                        <label for="base-url-input">Base URL for Local LLM Server</label>
+                        <input type="text" id="base-url-input" placeholder="http://127.0.0.1:1234">
+                        <p class="hint">Example: http://127.0.0.1:1234 or http://localhost:8000</p>
+                    </div>
+                    
+                    <div class="form-group" id="openrouter-settings" style="display: none;">
+                        <label for="api-key-input">OpenRouter API Key</label>
+                        <input type="password" id="api-key-input" placeholder="sk-or-v1-...">
+                        <p class="hint">Get your API key from <a href="https://openrouter.ai/keys" target="_blank" rel="noopener">openrouter.ai/keys</a></p>
+                    </div>
+                    
+                    <!-- Pexels API Settings -->
+                    <div class="form-group" id="pexels-settings">
+                        <hr class="settings-divider">
+                        <label for="pexels-api-key-input">Pexels API Key (for Real Images)</label>
+                        <input type="password" id="pexels-api-key-input" placeholder="Your Pexels API key">
+                        <p class="hint">Get your free API key from <a href="https://www.pexels.com/api/" target="_blank" rel="noopener">pexels.com/api</a></p>
+                    </div>
+                    
+                    <div class="form-buttons">
+                        <button type="button" id="reset-url-btn" class="reset-btn">Reset to Default</button>
+                        <button type="submit" id="save-url-btn" class="save-btn">Save & Connect</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Slide Modal -->
+    <div id="add-slide-modal" class="add-slide-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Slide</h3>
+                <button id="close-add-slide-modal" class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="add-slide-form" class="add-slide-form">
+                    <div class="form-group">
+                        <label for="slide-title-input">Slide Title <span class="required">*</span></label>
+                        <input type="text" id="slide-title-input" placeholder="Enter slide title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="slide-description-input">Slide Description (Optional)</label>
+                        <textarea id="slide-description-input" placeholder="Enter slide description or key points to include" rows="4"></textarea>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" id="cancel-add-slide-btn" class="cancel-btn">Cancel</button>
+                        <button type="submit" id="create-slide-btn" class="create-btn">Create Slide</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.all.min.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/fileHandler.js"></script>
+    <script src="js/pexelsClient.js"></script>
+    <script src="js/presentationBuilder.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
