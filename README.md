@@ -87,11 +87,6 @@ For maximum privacy, use:
       <img src="assets/images/7.Slide_Preview.png" alt="Slide Preview Grid" width="400"><br>
       <b>Interactive Slide Preview</b>
     </td>
-    <td align="center">
-      <img src="assets/images/12.Silde_preview.png" alt="Detailed Slide View" width="400"><br>
-      <b>Slide Details View</b>
-    </td>
-  </tr>
 </table>
 
 ### Custom Slide Addition
@@ -111,9 +106,18 @@ For maximum privacy, use:
       <img src="assets/images/10.Added_Slide_preview.png" alt="Added Slide Preview" width="400"><br>
       <b>Newly Added Slide</b>
     </td>
+</table>
+
+### Generated Presentation Example
+<table>
+  <tr>
     <td align="center">
       <img src="assets/images/11.Presentation_Generated.png" alt="Final Presentation" width="400"><br>
       <b>Complete Presentation</b>
+    </td>
+    <td align="center">
+      <img src="assets/images/12.Silde_preview.png" alt="Detailed Slide View" width="400"><br>
+      <b>Slide Details View</b>
     </td>
   </tr>
 </table>
