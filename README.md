@@ -236,6 +236,9 @@ All loaded via CDN - no installation required:
 Try the application with our sample PDF:
 - **<a href="assets/PDF_file_uploaded.pdf" target="_blank">Sample PDF Document</a>** - Use this file to test the PDF upload and context extraction features
 
+Presentation generated using the sample PDF as Local LLM gemma-3-27b-it
+- **<a href="assets/a_beginner_s_guide_to_large_language_models_prompt_2_powerpoint.pptx" target="_blank"> Generated Presentation</a>** - Presentation Settings: Simple/5 Slides/Professional Theme/Side-by-Side Image Placeholder Layout. Added Single Slide - Local LLM vs Cloud LLM API
+
 ### How to Test:
 1. Download or directly drag the sample PDF into the upload area
 2. Add a prompt like "Create a presentation based on this document"
