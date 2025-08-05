@@ -66,6 +66,14 @@ config.json
 secrets.json
 *.key
 *.pem
+credentials.json
+auth.json
+api-keys.json
+.credentials
+.secrets
+config.local.json
+config.production.json
+config.development.json
 
 # User-specific files
 settings.json
