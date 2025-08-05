@@ -61,8 +61,21 @@ class PresentationBuilder {
                 textColor: '333333',
                 backgroundColor: 'FFFFFF',
                 accentColor: 'CCCCCC'
+            },
+            custom: {
+                name: 'Custom',
+                headFontFace: 'Helvetica Neue',
+                bodyFontFace: 'Helvetica Neue',
+                primaryColor: '000000',
+                secondaryColor: '888888',
+                textColor: '333333',
+                backgroundColor: 'FFFFFF',
+                accentColor: 'CCCCCC'
             }
         };
+        
+        // Load saved custom theme if exists
+        this.loadCustomTheme();
     }
 
     /**
@@ -72,6 +85,10 @@ class PresentationBuilder {
     setTheme(themeName) {
         if (this.themes[themeName]) {
             this.selectedTheme = themeName;
+            // Save custom theme when it's selected
+            if (themeName === 'custom') {
+                this.saveCustomTheme();
+            }
         }
     }
     
@@ -81,6 +98,47 @@ class PresentationBuilder {
      */
     getCurrentTheme() {
         return this.themes[this.selectedTheme];
+    }
+    
+    /**
+     * Load custom theme from localStorage
+     */
+    loadCustomTheme() {
+        const savedCustomTheme = localStorage.getItem('custom_theme');
+        if (savedCustomTheme) {
+            try {
+                const customTheme = JSON.parse(savedCustomTheme);
+                // Merge with default custom theme to ensure all properties exist
+                this.themes.custom = {
+                    ...this.themes.custom,
+                    ...customTheme,
+                    name: 'Custom' // Ensure name stays as Custom
+                };
+            } catch (e) {
+                console.error('Error loading custom theme:', e);
+            }
+        }
+    }
+    
+    /**
+     * Save custom theme to localStorage
+     */
+    saveCustomTheme() {
+        if (this.selectedTheme === 'custom') {
+            localStorage.setItem('custom_theme', JSON.stringify(this.themes.custom));
+        }
+    }
+    
+    /**
+     * Update custom theme property
+     * @param {string} property - Theme property to update
+     * @param {string} value - New value for the property
+     */
+    updateCustomTheme(property, value) {
+        if (this.themes.custom && this.themes.custom.hasOwnProperty(property)) {
+            this.themes.custom[property] = value;
+            this.saveCustomTheme();
+        }
     }
 
     /**

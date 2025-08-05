@@ -74,6 +74,7 @@
                         <option value="corporate">Corporate</option>
                         <option value="creative">Creative</option>
                         <option value="minimalist">Minimalist</option>
+                        <option value="custom">Custom</option>
                     </select>
                 </div>
             </div>
@@ -85,11 +86,42 @@
                         <h5>Fonts</h5>
                         <div class="font-item">
                             <span class="font-label">Heading Font:</span>
-                            <span id="heading-font-preview" class="font-sample">Sample Heading Text</span>
+                            <div id="heading-font-container" class="font-container">
+                                <span id="heading-font-preview" class="font-sample">Sample Heading Text</span>
+                                <select id="heading-font-select" class="font-select" style="display: none;">
+                                    <option value="Arial">Arial</option>
+                                    <option value="Helvetica">Helvetica</option>
+                                    <option value="Helvetica Neue">Helvetica Neue</option>
+                                    <option value="Times New Roman">Times New Roman</option>
+                                    <option value="Georgia">Georgia</option>
+                                    <option value="Calibri">Calibri</option>
+                                    <option value="Verdana">Verdana</option>
+                                    <option value="Roboto">Roboto</option>
+                                    <option value="Comic Sans MS">Comic Sans MS</option>
+                                    <option value="Impact">Impact</option>
+                                    <option value="Trebuchet MS">Trebuchet MS</option>
+                                    <option value="Courier New">Courier New</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="font-item">
                             <span class="font-label">Body Font:</span>
-                            <span id="body-font-preview" class="font-sample">Sample body text for presentation content</span>
+                            <div id="body-font-container" class="font-container">
+                                <span id="body-font-preview" class="font-sample">Sample body text for presentation content</span>
+                                <select id="body-font-select" class="font-select" style="display: none;">
+                                    <option value="Arial">Arial</option>
+                                    <option value="Helvetica">Helvetica</option>
+                                    <option value="Helvetica Neue">Helvetica Neue</option>
+                                    <option value="Times New Roman">Times New Roman</option>
+                                    <option value="Georgia">Georgia</option>
+                                    <option value="Calibri">Calibri</option>
+                                    <option value="Verdana">Verdana</option>
+                                    <option value="Roboto">Roboto</option>
+                                    <option value="Comic Sans MS">Comic Sans MS</option>
+                                    <option value="Trebuchet MS">Trebuchet MS</option>
+                                    <option value="Courier New">Courier New</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     
@@ -98,22 +130,27 @@
                         <div class="color-grid">
                             <div class="color-item">
                                 <div class="color-swatch" id="primary-color-swatch"></div>
+                                <input type="color" id="primary-color-input" class="color-input">
                                 <span class="color-label">Heading</span>
                             </div>
                             <div class="color-item">
                                 <div class="color-swatch" id="secondary-color-swatch"></div>
+                                <input type="color" id="secondary-color-input" class="color-input">
                                 <span class="color-label">Sub-Heading</span>
                             </div>
                             <div class="color-item">
                                 <div class="color-swatch" id="text-color-swatch"></div>
+                                <input type="color" id="text-color-input" class="color-input">
                                 <span class="color-label">Text</span>
                             </div>
                             <div class="color-item">
                                 <div class="color-swatch" id="background-color-swatch"></div>
+                                <input type="color" id="background-color-input" class="color-input">
                                 <span class="color-label">Background</span>
                             </div>
                             <div class="color-item">
                                 <div class="color-swatch" id="accent-color-swatch"></div>
+                                <input type="color" id="accent-color-input" class="color-input">
                                 <span class="color-label">Accent</span>
                             </div>
                         </div>
