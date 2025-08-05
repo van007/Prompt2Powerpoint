@@ -64,15 +64,21 @@ For maximum privacy, use:
       <b>Presentation Configuration</b>
     </td>
     <td align="center">
-      <img src="assets/images/4.Image_Layout.png" alt="Image Layout Options" width="400"><br>
-      <b>Image Layout Selection</b>
+      <img src="assets/images/13.Custom_Theme.png" alt="Custom Theme Settings" width="400"><br>
+      <b>Custom Theme Configuration</b>
     </td>
   </tr>
   <tr>
     <td align="center">
+      <img src="assets/images/4.Image_Layout.png" alt="Image Layout Options" width="400"><br>
+      <b>Image Layout Selection</b>
+    </td>
+    <td align="center">
       <img src="assets/images/5.PDF_Upload.png" alt="PDF Upload Feature" width="400"><br>
       <b>PDF Context Upload</b>
     </td>
+  </tr>
+  <tr>
     <td align="center">
       <img src="assets/images/6.Generation.png" alt="Generation Progress" width="400"><br>
       <b>Real-time Generation Progress</b>
