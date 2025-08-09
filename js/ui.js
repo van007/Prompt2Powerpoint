@@ -88,6 +88,8 @@ class UiHandler {
         this.logoData = null;
         this.logoPosition = 'top-right';
         this.logoSize = 'small';
+        this.logoWidth = 0;
+        this.logoHeight = 0;
         
         // Event handlers
         this.setupEventListeners();
@@ -1146,6 +1148,8 @@ class UiHandler {
                 this.logoData = settings.data || null;
                 this.logoPosition = settings.position || 'top-right';
                 this.logoSize = settings.size || 'small';
+                this.logoWidth = settings.width || 0;
+                this.logoHeight = settings.height || 0;
                 
                 // Update UI to reflect saved settings
                 if (this.logoData) {
@@ -1236,8 +1240,16 @@ class UiHandler {
         const reader = new FileReader();
         reader.onload = (e) => {
             this.logoData = e.target.result;
-            this.showLogoPreview(this.logoData);
-            this.saveLogoSettings();
+            
+            // Create an image to get dimensions
+            const img = new Image();
+            img.onload = () => {
+                this.logoWidth = img.width;
+                this.logoHeight = img.height;
+                this.showLogoPreview(this.logoData);
+                this.saveLogoSettings();
+            };
+            img.src = e.target.result;
         };
         reader.readAsDataURL(file);
     }
@@ -1263,6 +1275,8 @@ class UiHandler {
      */
     removeLogo() {
         this.logoData = null;
+        this.logoWidth = 0;
+        this.logoHeight = 0;
         
         // Reset UI
         if (this.elements.logoUploadContent) {
@@ -1286,7 +1300,9 @@ class UiHandler {
         const settings = {
             data: this.logoData,
             position: this.logoPosition,
-            size: this.logoSize
+            size: this.logoSize,
+            width: this.logoWidth,
+            height: this.logoHeight
         };
         localStorage.setItem('logoSettings', JSON.stringify(settings));
     }
@@ -1299,7 +1315,9 @@ class UiHandler {
         return {
             data: this.logoData,
             position: this.logoPosition,
-            size: this.logoSize
+            size: this.logoSize,
+            width: this.logoWidth,
+            height: this.logoHeight
         };
     }
 }

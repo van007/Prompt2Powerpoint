@@ -14,6 +14,8 @@ class PresentationBuilder {
         this.logoData = null; // Base64 encoded logo data
         this.logoPosition = 'top-right'; // 'top-right' or 'bottom-left'
         this.logoSize = 'small'; // 'small', 'medium', or 'large'
+        this.logoWidth = 0; // Original logo width
+        this.logoHeight = 0; // Original logo height
         
         // Define available themes
         this.themes = {
@@ -151,11 +153,15 @@ class PresentationBuilder {
      * @param {string} logoData - Base64 encoded logo data
      * @param {string} position - Logo position ('top-right' or 'bottom-left')
      * @param {string} size - Logo size ('small', 'medium', or 'large')
+     * @param {number} width - Original logo width
+     * @param {number} height - Original logo height
      */
-    setLogo(logoData, position, size) {
+    setLogo(logoData, position, size, width = 0, height = 0) {
         this.logoData = logoData;
         this.logoPosition = position || 'top-right';
         this.logoSize = size || 'small';
+        this.logoWidth = width;
+        this.logoHeight = height;
     }
     
     /**
@@ -165,6 +171,8 @@ class PresentationBuilder {
         this.logoData = null;
         this.logoPosition = 'top-right';
         this.logoSize = 'small';
+        this.logoWidth = 0;
+        this.logoHeight = 0;
     }
     
     /**
@@ -176,41 +184,48 @@ class PresentationBuilder {
             return;
         }
         
-        // Define size mappings (percentage of slide width)
-        const sizeMap = {
-            'small': 0.05,    // 5% of slide width
-            'medium': 0.07,   // 7% of slide width
-            'large': 0.10     // 10% of slide width
+        // Define height mappings (percentage of slide height)
+        const heightMap = {
+            'small': 0.05,    // 5% of slide height
+            'medium': 0.07,   // 7% of slide height
+            'large': 0.10     // 10% of slide height
         };
         
-        // Get the width percentage based on size
-        const widthPercent = sizeMap[this.logoSize] * 100;
+        // Slide aspect ratio (16:9 for widescreen presentations)
+        const slideAspectRatio = 16 / 9;
+        
+        // Fix the height based on size setting
+        const heightPercent = heightMap[this.logoSize] * 100;
+        
+        // Calculate logo aspect ratio
+        const logoAspectRatio = this.logoWidth > 0 && this.logoHeight > 0 ? 
+            this.logoWidth / this.logoHeight : 1;
+        
+        // Calculate width to maintain aspect ratio
+        // Account for slide aspect ratio when converting height% to width%
+        const widthPercent = (heightPercent * logoAspectRatio) / slideAspectRatio;
+        
+        // Build logo configuration with both width and height
+        let logoConfig = {
+            data: this.logoData,
+            h: `${heightPercent}%`,
+            w: `${widthPercent}%`
+        };
         
         // Calculate position based on selected option
-        let x = '5%'; // Default for bottom-left
-        let y = '5%'; // Default for top-right
-        
         if (this.logoPosition === 'top-right') {
             // Position in top-right corner
-            x = `${95 - widthPercent}%`; // Right edge minus logo width
-            y = '5%';
+            logoConfig.x = `${95 - widthPercent}%`;
+            logoConfig.y = '5%';
         } else if (this.logoPosition === 'bottom-left') {
             // Position in bottom-left corner
-            x = '5%';
-            // Adjust y position for bottom placement
-            // Account for logo height (assuming aspect ratio of approximately 1:1 for safety)
-            y = `${90 - widthPercent * 0.5625}%`; // 0.5625 is 9/16 aspect ratio adjustment
+            logoConfig.x = '5%';
+            logoConfig.y = `${95 - heightPercent}%`;
         }
         
         // Add the logo image to the slide
         try {
-            slide.addImage({
-                data: this.logoData,
-                x: x,
-                y: y,
-                w: `${widthPercent}%`,
-                sizing: { type: 'contain' } // Maintain aspect ratio
-            });
+            slide.addImage(logoConfig);
         } catch (error) {
             console.error('Error adding logo to slide:', error);
         }

@@ -47,6 +47,7 @@ A powerful AI-driven web application that generates professional PowerPoint pres
 - **Smart Context Understanding**: Upload PDF/text files for context-aware presentations
 - **Real Stock Images**: Optional integration with Pexels API for professional imagery
 - **Theme System**: 6 professionally designed themes including a fully customizable option
+- **Custom Logo Support**: Add your company/personal logo to all slides with flexible positioning
 - **Interactive Editing**: Add custom slides at any position post-generation
 - **Real-time Preview**: See your presentation as it's being created
 - **Instant Download**: Export as standard PPTX files compatible with PowerPoint
@@ -195,6 +196,7 @@ For maximum privacy, use:
    - **Complexity**: Simple (basic), Standard (balanced), or Detailed (comprehensive)
    - **Slide Count**: 5-20 slides
    - **Theme**: Choose from 6 options including Custom
+   - **Logo** (Optional): Upload PNG/JPG logo, choose position and size
    - **Model**: Select based on your provider
 
 4. **Generate & Download**:
@@ -222,6 +224,22 @@ Create your own personalized theme with complete control:
 4. **Color Customization**: Click any color swatch to open a color picker
 5. **Real-time Preview**: See changes instantly as you customize
 6. **Persistent Settings**: Your custom theme saves automatically
+
+### Custom Logo Integration
+
+Add professional branding to your presentations:
+
+1. **Upload Logo**: Support for PNG/JPG images up to 5MB
+2. **Position Options**: 
+   - Top Right (default) - Professional placement
+   - Bottom Left - Alternative positioning
+3. **Size Selection**:
+   - Small (5% of slide height)
+   - Medium (7% of slide height)
+   - Large (10% of slide height)
+4. **Automatic Aspect Ratio**: Logo proportions preserved on all slides
+5. **Visual Preview**: See logo placement before generation
+6. **Persistent Storage**: Logo settings saved for future use
 
 ## 💡 Recommendations
 
@@ -326,10 +344,12 @@ Custom slides: Add specific client case studies using the + button
 Prompt: "Create a presentation about our quarterly results"
 Settings: Local LLM, Standard complexity, Theme: Custom, Placeholders
 Custom theme: Brand colors (#1E3A8A primary, #F59E0B accent), Roboto font
+Logo: Company logo, Top Right position, Medium size
 ```
 
 ## 🌟 Latest Updates
 
+- **Custom Logo Feature**: Upload and position company logos on all slides
 - **Custom Theme Feature**: Create personalized themes with interactive controls
 - **Theme System**: 6 themes including fully customizable option
 - **Single Slide Addition**: Context-aware custom slide insertion

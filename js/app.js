@@ -163,7 +163,9 @@ class App {
                 presentationBuilder.setLogo(
                     inputValues.logoSettings.data,
                     inputValues.logoSettings.position,
-                    inputValues.logoSettings.size
+                    inputValues.logoSettings.size,
+                    inputValues.logoSettings.width,
+                    inputValues.logoSettings.height
                 );
             } else {
                 presentationBuilder.clearLogo();
