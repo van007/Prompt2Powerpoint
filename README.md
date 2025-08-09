@@ -4,6 +4,39 @@
   <img src="assets/icon.png" alt="Prompt 2 Powerpoint Logo" width="120" height="120">
 </p>
 
+<p align="center">
+  <!-- Modern MIT License -->
+  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge&logo=opensourceinitiative&logoColor=white" alt="License: MIT">
+  <!-- Version -->
+  <img src="https://img.shields.io/badge/Version-0.1.0-blue?style=for-the-badge" alt="Version">
+  <!-- JavaScript -->
+  <img src="https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor" alt="JavaScript">
+  <!-- HTML5 -->
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
+  <!-- CSS3 -->
+  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3">
+  <!-- PowerPoint Output -->
+  <img src="https://img.shields.io/badge/Output-PowerPoint-B7472A?style=for-the-badge&logo=microsoft-powerpoint&logoColor=white" alt="PowerPoint Output">
+</p>
+
+<p align="center">
+  <!-- Contributions Welcome -->
+  <img src="https://img.shields.io/badge/Contributions-Welcome-brightgreen?style=for-the-badge" alt="Contributions Welcome">
+  <!-- PRs Welcome -->
+  <img src="https://img.shields.io/badge/PRs-Welcome-brightgreen?style=for-the-badge&logo=github" alt="PRs Welcome">
+  <!-- Maintained -->
+  <img src="https://img.shields.io/badge/Maintained-Yes-green?style=for-the-badge" alt="Maintained">
+</p>
+
+<p align="center">
+  <!-- jsDelivr -->
+  <img src="https://img.shields.io/badge/CDN-jsDelivr-E84D3D?style=for-the-badge&logo=jsdelivr&logoColor=white" alt="jsDelivr CDN">
+  <!-- cdnjs -->
+  <img src="https://img.shields.io/badge/CDN-cdnjs-F38020?style=for-the-badge&logo=cloudflare&logoColor=white" alt="cdnjs">
+  <!-- Google Fonts -->
+  <img src="https://img.shields.io/badge/Fonts-Google_Fonts-4285F4?style=for-the-badge&logo=google-fonts&logoColor=white" alt="Google Fonts">
+</p>
+
 A powerful AI-driven web application that generates professional PowerPoint presentations using LLM APIs. Support for both privacy-focused local LLM servers and cloud-based OpenRouter API, with optional real image integration via Pexels.
 
 ## 🚀 Key Features
