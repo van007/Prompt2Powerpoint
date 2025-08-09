@@ -13,7 +13,7 @@ A powerful AI-driven web application that generates professional PowerPoint pres
 - **Privacy-First Options**: Keep your data completely private with local LLM processing
 - **Smart Context Understanding**: Upload PDF/text files for context-aware presentations
 - **Real Stock Images**: Optional integration with Pexels API for professional imagery
-- **Theme System**: 5 professionally designed themes with custom fonts and colors
+- **Theme System**: 6 professionally designed themes including a fully customizable option
 - **Interactive Editing**: Add custom slides at any position post-generation
 - **Real-time Preview**: See your presentation as it's being created
 - **Instant Download**: Export as standard PPTX files compatible with PowerPoint
@@ -60,15 +60,21 @@ For maximum privacy, use:
       <b>Presentation Configuration</b>
     </td>
     <td align="center">
-      <img src="assets/images/4.Image_Layout.png" alt="Image Layout Options" width="400"><br>
-      <b>Image Layout Selection</b>
+      <img src="assets/images/13.Custom_Theme.png" alt="Custom Theme Settings" width="400"><br>
+      <b>Custom Theme Configuration</b>
     </td>
   </tr>
   <tr>
     <td align="center">
+      <img src="assets/images/4.Image_Layout.png" alt="Image Layout Options" width="400"><br>
+      <b>Image Layout Selection</b>
+    </td>
+    <td align="center">
       <img src="assets/images/5.PDF_Upload.png" alt="PDF Upload Feature" width="400"><br>
       <b>PDF Context Upload</b>
     </td>
+  </tr>
+  <tr>
     <td align="center">
       <img src="assets/images/6.Generation.png" alt="Generation Progress" width="400"><br>
       <b>Real-time Generation Progress</b>
@@ -145,7 +151,7 @@ For maximum privacy, use:
 1. **Choose Your Setup**:
    - Select provider (Local LLM or OpenRouter)
    - Choose image preference (None, Placeholders, or Real Images)
-   - Pick a theme from 5 professional options
+   - Pick a theme from 6 options (including Custom for full control)
 
 2. **Provide Context**:
    - Enter a detailed prompt describing your presentation
@@ -155,6 +161,7 @@ For maximum privacy, use:
 3. **Configure Generation**:
    - **Complexity**: Simple (basic), Standard (balanced), or Detailed (comprehensive)
    - **Slide Count**: 5-20 slides
+   - **Theme**: Choose from 6 options including Custom
    - **Model**: Select based on your provider
 
 4. **Generate & Download**:
@@ -171,6 +178,17 @@ Perfect for adding custom flow to your presentations:
 3. **AI-Powered Generation**: New slides maintain consistent style and context
 4. **Instant Preview**: See changes immediately
 5. **Seamless Integration**: Download includes all custom additions
+
+### Custom Theme Creation
+
+Create your own personalized theme with complete control:
+
+1. **Select Custom Theme**: Choose "Custom" from the theme dropdown
+2. **Interactive Controls**: The theme preview becomes interactive
+3. **Font Selection**: Choose from 12 fonts for headings and body text
+4. **Color Customization**: Click any color swatch to open a color picker
+5. **Real-time Preview**: See changes instantly as you customize
+6. **Persistent Settings**: Your custom theme saves automatically
 
 ## 💡 Recommendations
 
@@ -270,9 +288,17 @@ Settings: OpenRouter, Simple complexity, Theme: Corporate, Real Images
 Custom slides: Add specific client case studies using the + button
 ```
 
+### Example 4: Custom Branded Presentation
+```
+Prompt: "Create a presentation about our quarterly results"
+Settings: Local LLM, Standard complexity, Theme: Custom, Placeholders
+Custom theme: Brand colors (#1E3A8A primary, #F59E0B accent), Roboto font
+```
+
 ## 🌟 Latest Updates
 
-- **Theme System**: 5 professional themes with custom fonts
+- **Custom Theme Feature**: Create personalized themes with interactive controls
+- **Theme System**: 6 themes including fully customizable option
 - **Single Slide Addition**: Context-aware custom slide insertion
 - **Multi-Provider Support**: Seamless switching between local and cloud
 - **Improved Layouts**: Image layout options including background mode

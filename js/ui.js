@@ -62,7 +62,18 @@ class UiHandler {
             realImagesDesc: document.querySelector('.real-images-desc'),
             
             // Pexels API
-            pexelsApiKeyInput: document.getElementById('pexels-api-key-input')
+            pexelsApiKeyInput: document.getElementById('pexels-api-key-input'),
+            
+            // Font selects
+            headingFontSelect: document.getElementById('heading-font-select'),
+            bodyFontSelect: document.getElementById('body-font-select'),
+            
+            // Color inputs
+            primaryColorInput: document.getElementById('primary-color-input'),
+            secondaryColorInput: document.getElementById('secondary-color-input'),
+            textColorInput: document.getElementById('text-color-input'),
+            backgroundColorInput: document.getElementById('background-color-input'),
+            accentColorInput: document.getElementById('accent-color-input')
         };
         
         // Event handlers
@@ -181,6 +192,9 @@ class UiHandler {
         
         // Initialize real images toggle state
         this.onImageTypeToggled();
+        
+        // Custom theme event listeners
+        this.setupCustomThemeListeners();
     }
     
     /**
@@ -743,12 +757,36 @@ class UiHandler {
         // Show the preview
         this.elements.themePreview.style.display = 'block';
         
-        // Update font previews with actual fonts
-        this.elements.headingFontPreview.style.fontFamily = theme.headFontFace;
-        this.elements.headingFontPreview.textContent = `${theme.headFontFace}`;
+        const isCustomTheme = themeName === 'custom';
         
-        this.elements.bodyFontPreview.style.fontFamily = theme.bodyFontFace;
-        this.elements.bodyFontPreview.textContent = `${theme.bodyFontFace}`;
+        // Handle font display
+        if (isCustomTheme) {
+            // Hide font preview spans and show selects
+            this.elements.headingFontPreview.style.display = 'none';
+            this.elements.bodyFontPreview.style.display = 'none';
+            this.elements.headingFontSelect.style.display = 'block';
+            this.elements.bodyFontSelect.style.display = 'block';
+            
+            // Set select values
+            this.elements.headingFontSelect.value = theme.headFontFace;
+            this.elements.bodyFontSelect.value = theme.bodyFontFace;
+            
+            // Update select font styles
+            this.elements.headingFontSelect.style.fontFamily = theme.headFontFace;
+            this.elements.bodyFontSelect.style.fontFamily = theme.bodyFontFace;
+        } else {
+            // Show font preview spans and hide selects
+            this.elements.headingFontPreview.style.display = 'inline-block';
+            this.elements.bodyFontPreview.style.display = 'inline-block';
+            this.elements.headingFontSelect.style.display = 'none';
+            this.elements.bodyFontSelect.style.display = 'none';
+            
+            // Update font previews
+            this.elements.headingFontPreview.style.fontFamily = theme.headFontFace;
+            this.elements.headingFontPreview.textContent = `${theme.headFontFace}`;
+            this.elements.bodyFontPreview.style.fontFamily = theme.bodyFontFace;
+            this.elements.bodyFontPreview.textContent = `${theme.bodyFontFace}`;
+        }
         
         // Update color swatches
         this.elements.primaryColorSwatch.style.backgroundColor = `#${theme.primaryColor}`;
@@ -756,6 +794,27 @@ class UiHandler {
         this.elements.textColorSwatch.style.backgroundColor = `#${theme.textColor}`;
         this.elements.backgroundColorSwatch.style.backgroundColor = `#${theme.backgroundColor}`;
         this.elements.accentColorSwatch.style.backgroundColor = `#${theme.accentColor}`;
+        
+        // Make color swatches clickable for custom theme
+        const colorSwatches = document.querySelectorAll('.color-swatch');
+        if (isCustomTheme) {
+            colorSwatches.forEach(swatch => {
+                swatch.style.cursor = 'pointer';
+                swatch.classList.add('clickable');
+            });
+            
+            // Set color input values
+            this.elements.primaryColorInput.value = `#${theme.primaryColor}`;
+            this.elements.secondaryColorInput.value = `#${theme.secondaryColor}`;
+            this.elements.textColorInput.value = `#${theme.textColor}`;
+            this.elements.backgroundColorInput.value = `#${theme.backgroundColor}`;
+            this.elements.accentColorInput.value = `#${theme.accentColor}`;
+        } else {
+            colorSwatches.forEach(swatch => {
+                swatch.style.cursor = 'default';
+                swatch.classList.remove('clickable');
+            });
+        }
     }
 
     /**
@@ -949,6 +1008,113 @@ class UiHandler {
             confirmButtonColor: '#2D5BFF',
             width: '600px'
         });
+    }
+    
+    /**
+     * Set up event listeners for custom theme controls
+     */
+    setupCustomThemeListeners() {
+        // Font controls
+        if (this.elements.headingFontSelect) {
+            this.elements.headingFontSelect.addEventListener('change', (e) => {
+                this.updateCustomThemeProperty('headFontFace', e.target.value);
+                e.target.style.fontFamily = e.target.value;
+            });
+        }
+        
+        if (this.elements.bodyFontSelect) {
+            this.elements.bodyFontSelect.addEventListener('change', (e) => {
+                this.updateCustomThemeProperty('bodyFontFace', e.target.value);
+                e.target.style.fontFamily = e.target.value;
+            });
+        }
+        
+        // Color swatch click handlers
+        if (this.elements.primaryColorSwatch) {
+            this.elements.primaryColorSwatch.addEventListener('click', () => {
+                if (this.elements.themeSelect.value === 'custom') {
+                    this.elements.primaryColorInput.click();
+                }
+            });
+        }
+        
+        if (this.elements.secondaryColorSwatch) {
+            this.elements.secondaryColorSwatch.addEventListener('click', () => {
+                if (this.elements.themeSelect.value === 'custom') {
+                    this.elements.secondaryColorInput.click();
+                }
+            });
+        }
+        
+        if (this.elements.textColorSwatch) {
+            this.elements.textColorSwatch.addEventListener('click', () => {
+                if (this.elements.themeSelect.value === 'custom') {
+                    this.elements.textColorInput.click();
+                }
+            });
+        }
+        
+        if (this.elements.backgroundColorSwatch) {
+            this.elements.backgroundColorSwatch.addEventListener('click', () => {
+                if (this.elements.themeSelect.value === 'custom') {
+                    this.elements.backgroundColorInput.click();
+                }
+            });
+        }
+        
+        if (this.elements.accentColorSwatch) {
+            this.elements.accentColorSwatch.addEventListener('click', () => {
+                if (this.elements.themeSelect.value === 'custom') {
+                    this.elements.accentColorInput.click();
+                }
+            });
+        }
+        
+        // Color input change handlers
+        if (this.elements.primaryColorInput) {
+            this.elements.primaryColorInput.addEventListener('input', (e) => {
+                this.updateCustomThemeProperty('primaryColor', e.target.value.substring(1));
+                this.elements.primaryColorSwatch.style.backgroundColor = e.target.value;
+            });
+        }
+        
+        if (this.elements.secondaryColorInput) {
+            this.elements.secondaryColorInput.addEventListener('input', (e) => {
+                this.updateCustomThemeProperty('secondaryColor', e.target.value.substring(1));
+                this.elements.secondaryColorSwatch.style.backgroundColor = e.target.value;
+            });
+        }
+        
+        if (this.elements.textColorInput) {
+            this.elements.textColorInput.addEventListener('input', (e) => {
+                this.updateCustomThemeProperty('textColor', e.target.value.substring(1));
+                this.elements.textColorSwatch.style.backgroundColor = e.target.value;
+            });
+        }
+        
+        if (this.elements.backgroundColorInput) {
+            this.elements.backgroundColorInput.addEventListener('input', (e) => {
+                this.updateCustomThemeProperty('backgroundColor', e.target.value.substring(1));
+                this.elements.backgroundColorSwatch.style.backgroundColor = e.target.value;
+            });
+        }
+        
+        if (this.elements.accentColorInput) {
+            this.elements.accentColorInput.addEventListener('input', (e) => {
+                this.updateCustomThemeProperty('accentColor', e.target.value.substring(1));
+                this.elements.accentColorSwatch.style.backgroundColor = e.target.value;
+            });
+        }
+    }
+    
+    /**
+     * Update custom theme property
+     * @param {string} property - Property to update
+     * @param {string} value - New value
+     */
+    updateCustomThemeProperty(property, value) {
+        // Update the theme
+        presentationBuilder.updateCustomTheme(property, value);
     }
 }
 
