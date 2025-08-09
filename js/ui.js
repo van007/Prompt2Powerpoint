@@ -73,14 +73,30 @@ class UiHandler {
             secondaryColorInput: document.getElementById('secondary-color-input'),
             textColorInput: document.getElementById('text-color-input'),
             backgroundColorInput: document.getElementById('background-color-input'),
-            accentColorInput: document.getElementById('accent-color-input')
+            accentColorInput: document.getElementById('accent-color-input'),
+            
+            // Logo elements
+            logoUploadArea: document.getElementById('logo-upload-area'),
+            logoUploadContent: document.getElementById('logo-upload-content'),
+            logoFileInput: document.getElementById('logo-file-input'),
+            logoPreviewContainer: document.getElementById('logo-preview-container'),
+            logoPreviewImage: document.getElementById('logo-preview-image'),
+            removeLogoBtn: document.getElementById('remove-logo-btn')
         };
+        
+        // Logo data storage
+        this.logoData = null;
+        this.logoPosition = 'top-right';
+        this.logoSize = 'small';
         
         // Event handlers
         this.setupEventListeners();
         
         // Initialize URL field with current value
         this.initializeUrlField();
+        
+        // Initialize logo settings
+        this.initializeLogoSettings();
         
         // Store the insertion position for new slides
         this.slideInsertPosition = 0;
@@ -689,7 +705,8 @@ class UiHandler {
             modelId: this.elements.modelSelect.value,
             theme: this.elements.themeSelect.value,
             imageLayout: this.getSelectedImageLayout(),
-            useRealImages: this.getUseRealImages()
+            useRealImages: this.getUseRealImages(),
+            logoSettings: this.getLogoSettings()
         };
     }
     
@@ -1115,6 +1132,175 @@ class UiHandler {
     updateCustomThemeProperty(property, value) {
         // Update the theme
         presentationBuilder.updateCustomTheme(property, value);
+    }
+    
+    /**
+     * Initialize logo settings
+     */
+    initializeLogoSettings() {
+        // Load saved logo settings
+        const savedLogoSettings = localStorage.getItem('logoSettings');
+        if (savedLogoSettings) {
+            try {
+                const settings = JSON.parse(savedLogoSettings);
+                this.logoData = settings.data || null;
+                this.logoPosition = settings.position || 'top-right';
+                this.logoSize = settings.size || 'small';
+                
+                // Update UI to reflect saved settings
+                if (this.logoData) {
+                    this.showLogoPreview(this.logoData);
+                }
+                
+                // Set radio buttons
+                document.querySelectorAll('input[name="logo-position"]').forEach(radio => {
+                    radio.checked = radio.value === this.logoPosition;
+                });
+                document.querySelectorAll('input[name="logo-size"]').forEach(radio => {
+                    radio.checked = radio.value === this.logoSize;
+                });
+            } catch (e) {
+                console.error('Error loading logo settings:', e);
+            }
+        }
+        
+        // Set up logo upload event listeners
+        this.setupLogoEventListeners();
+    }
+    
+    /**
+     * Set up logo-related event listeners
+     */
+    setupLogoEventListeners() {
+        // Logo upload click
+        if (this.elements.logoUploadContent) {
+            this.elements.logoUploadContent.addEventListener('click', () => {
+                this.elements.logoFileInput.click();
+            });
+        }
+        
+        // Logo file input change
+        if (this.elements.logoFileInput) {
+            this.elements.logoFileInput.addEventListener('change', (e) => {
+                this.handleLogoUpload(e);
+            });
+        }
+        
+        // Remove logo button
+        if (this.elements.removeLogoBtn) {
+            this.elements.removeLogoBtn.addEventListener('click', () => {
+                this.removeLogo();
+            });
+        }
+        
+        // Logo position radio buttons
+        document.querySelectorAll('input[name="logo-position"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                this.logoPosition = e.target.value;
+                this.saveLogoSettings();
+            });
+        });
+        
+        // Logo size radio buttons
+        document.querySelectorAll('input[name="logo-size"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                this.logoSize = e.target.value;
+                this.saveLogoSettings();
+            });
+        });
+    }
+    
+    /**
+     * Handle logo file upload
+     * @param {Event} event - File input change event
+     */
+    handleLogoUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        
+        // Validate file type
+        const validTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+        if (!validTypes.includes(file.type)) {
+            this.showError('Please upload a PNG or JPG image');
+            return;
+        }
+        
+        // Validate file size (max 5MB)
+        const maxSize = 5 * 1024 * 1024;
+        if (file.size > maxSize) {
+            this.showError('Logo file size must be less than 5MB');
+            return;
+        }
+        
+        // Read file as base64
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            this.logoData = e.target.result;
+            this.showLogoPreview(this.logoData);
+            this.saveLogoSettings();
+        };
+        reader.readAsDataURL(file);
+    }
+    
+    /**
+     * Show logo preview
+     * @param {string} logoData - Base64 encoded logo data
+     */
+    showLogoPreview(logoData) {
+        if (this.elements.logoPreviewImage) {
+            this.elements.logoPreviewImage.src = logoData;
+        }
+        if (this.elements.logoUploadContent) {
+            this.elements.logoUploadContent.style.display = 'none';
+        }
+        if (this.elements.logoPreviewContainer) {
+            this.elements.logoPreviewContainer.style.display = 'flex';
+        }
+    }
+    
+    /**
+     * Remove logo
+     */
+    removeLogo() {
+        this.logoData = null;
+        
+        // Reset UI
+        if (this.elements.logoUploadContent) {
+            this.elements.logoUploadContent.style.display = 'flex';
+        }
+        if (this.elements.logoPreviewContainer) {
+            this.elements.logoPreviewContainer.style.display = 'none';
+        }
+        if (this.elements.logoFileInput) {
+            this.elements.logoFileInput.value = '';
+        }
+        
+        // Clear saved settings
+        this.saveLogoSettings();
+    }
+    
+    /**
+     * Save logo settings to localStorage
+     */
+    saveLogoSettings() {
+        const settings = {
+            data: this.logoData,
+            position: this.logoPosition,
+            size: this.logoSize
+        };
+        localStorage.setItem('logoSettings', JSON.stringify(settings));
+    }
+    
+    /**
+     * Get current logo settings
+     * @returns {object} Logo settings
+     */
+    getLogoSettings() {
+        return {
+            data: this.logoData,
+            position: this.logoPosition,
+            size: this.logoSize
+        };
     }
 }
 

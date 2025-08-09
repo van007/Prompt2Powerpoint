@@ -240,6 +240,61 @@
             </div>
         </section>
 
+        <section class="logo-settings-section">
+            <h3>Logo Settings</h3>
+            <p class="section-description">Add a custom logo to all slides in your presentation</p>
+            
+            <div class="logo-upload-container">
+                <div class="logo-upload-area" id="logo-upload-area">
+                    <div class="logo-upload-content" id="logo-upload-content">
+                        <i class="fas fa-image"></i>
+                        <p>Click to upload logo (PNG or JPG)</p>
+                        <input type="file" id="logo-file-input" accept=".png,.jpg,.jpeg" hidden>
+                    </div>
+                    <div class="logo-preview-container" id="logo-preview-container" style="display: none;">
+                        <img id="logo-preview-image" alt="Logo preview">
+                        <button class="remove-logo-btn" id="remove-logo-btn" title="Remove logo">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="logo-options">
+                    <div class="logo-option-group">
+                        <label>Logo Position</label>
+                        <div class="logo-position-options">
+                            <label class="radio-option">
+                                <input type="radio" name="logo-position" value="top-right" checked>
+                                <span>Top Right</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="logo-position" value="bottom-left">
+                                <span>Bottom Left</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="logo-option-group">
+                        <label>Logo Size</label>
+                        <div class="logo-size-options">
+                            <label class="radio-option">
+                                <input type="radio" name="logo-size" value="small" checked>
+                                <span>Small</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="logo-size" value="medium">
+                                <span>Medium</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="logo-size" value="large">
+                                <span>Large</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section class="upload-section">
             <h3>Upload Files</h3>
             <div class="upload-container" id="upload-area">

@@ -10,6 +10,11 @@ class PresentationBuilder {
         this.useRealImages = false; // Whether to use real images from Pexels
         this.imageCache = new Map(); // Cache for fetched images
         
+        // Logo properties
+        this.logoData = null; // Base64 encoded logo data
+        this.logoPosition = 'top-right'; // 'top-right' or 'bottom-left'
+        this.logoSize = 'small'; // 'small', 'medium', or 'large'
+        
         // Define available themes
         this.themes = {
             professional: {
@@ -140,6 +145,76 @@ class PresentationBuilder {
             this.saveCustomTheme();
         }
     }
+    
+    /**
+     * Set logo configuration
+     * @param {string} logoData - Base64 encoded logo data
+     * @param {string} position - Logo position ('top-right' or 'bottom-left')
+     * @param {string} size - Logo size ('small', 'medium', or 'large')
+     */
+    setLogo(logoData, position, size) {
+        this.logoData = logoData;
+        this.logoPosition = position || 'top-right';
+        this.logoSize = size || 'small';
+    }
+    
+    /**
+     * Clear logo configuration
+     */
+    clearLogo() {
+        this.logoData = null;
+        this.logoPosition = 'top-right';
+        this.logoSize = 'small';
+    }
+    
+    /**
+     * Add logo to a slide
+     * @param {object} slide - PptxGenJS slide object
+     */
+    addLogoToSlide(slide) {
+        if (!this.logoData) {
+            return;
+        }
+        
+        // Define size mappings (percentage of slide width)
+        const sizeMap = {
+            'small': 0.05,    // 5% of slide width
+            'medium': 0.07,   // 7% of slide width
+            'large': 0.10     // 10% of slide width
+        };
+        
+        // Get the width percentage based on size
+        const widthPercent = sizeMap[this.logoSize] * 100;
+        
+        // Calculate position based on selected option
+        let x = '5%'; // Default for bottom-left
+        let y = '5%'; // Default for top-right
+        
+        if (this.logoPosition === 'top-right') {
+            // Position in top-right corner
+            x = `${95 - widthPercent}%`; // Right edge minus logo width
+            y = '5%';
+        } else if (this.logoPosition === 'bottom-left') {
+            // Position in bottom-left corner
+            x = '5%';
+            // Adjust y position for bottom placement
+            // Account for logo height (assuming aspect ratio of approximately 1:1 for safety)
+            y = `${90 - widthPercent * 0.5625}%`; // 0.5625 is 9/16 aspect ratio adjustment
+        }
+        
+        // Add the logo image to the slide
+        try {
+            slide.addImage({
+                data: this.logoData,
+                x: x,
+                y: y,
+                w: `${widthPercent}%`,
+                sizing: { type: 'contain' } // Maintain aspect ratio
+            });
+        } catch (error) {
+            console.error('Error adding logo to slide:', error);
+        }
+    }
 
     /**
      * Initialize a new presentation
@@ -210,6 +285,9 @@ class PresentationBuilder {
         const slide = this.pptx.addSlide();
         const theme = this.getCurrentTheme();
         
+        // Add logo if configured
+        this.addLogoToSlide(slide);
+        
         // Add title
         slide.addText(title, {
             x: '10%',
@@ -259,6 +337,9 @@ class PresentationBuilder {
     async createContentSlide(slideData) {
         const slide = this.pptx.addSlide();
         const theme = this.getCurrentTheme();
+        
+        // Add logo if configured
+        this.addLogoToSlide(slide);
         
         // Determine layout type with intelligent fallback
         let layout = slideData.imageLayout || 'none';
@@ -694,6 +775,9 @@ class PresentationBuilder {
     createClosingSlide() {
         const slide = this.pptx.addSlide();
         const theme = this.getCurrentTheme();
+        
+        // Add logo if configured
+        this.addLogoToSlide(slide);
         
         // Add thank you message
         slide.addText('Thank You', {

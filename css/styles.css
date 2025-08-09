@@ -995,6 +995,152 @@ footer {
     max-width: 1200px;
 }
 
+/* Logo Settings Section */
+.logo-settings-section {
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 1200px;
+}
+
+.logo-upload-container {
+    display: flex;
+    gap: 2rem;
+    align-items: stretch;
+    flex-wrap: wrap;
+    min-height: 230px;
+}
+
+.logo-upload-area {
+    width: 300px;
+    height: 230px;
+    background: white;
+    border: 2px dashed var(--light-gray);
+    border-radius: var(--border-radius);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-upload-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.logo-upload-content:hover {
+    background-color: #f8f9fa;
+}
+
+.logo-upload-content i {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.logo-upload-content p {
+    color: #666;
+    text-align: center;
+    margin: 0;
+}
+
+.logo-preview-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.logo-preview-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.remove-logo-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: var(--error-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.remove-logo-btn:hover {
+    background-color: #c82333;
+}
+
+.logo-options {
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.logo-option-group {
+    background: white;
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.logo-option-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+.logo-position-options,
+.logo-size-options {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.logo-position-options .radio-option,
+.logo-size-options .radio-option {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.logo-position-options input[type="radio"],
+.logo-size-options input[type="radio"] {
+    margin-right: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .logo-upload-container {
+        flex-direction: column;
+    }
+    
+    .logo-upload-area {
+        width: 100%;
+    }
+    
+    .logo-options {
+        width: 100%;
+    }
+}
+
 .section-description {
     color: #666;
     margin-bottom: 1.5rem;
