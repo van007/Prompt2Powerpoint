@@ -8,7 +8,7 @@
   <!-- Modern MIT License -->
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge&logo=opensourceinitiative&logoColor=white" alt="License: MIT">
   <!-- Version -->
-  <img src="https://img.shields.io/badge/Version-0.1.0-blue?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Version-0.1.1-blue?style=for-the-badge" alt="Version">
   <!-- JavaScript -->
   <img src="https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor" alt="JavaScript">
   <!-- HTML5 -->
@@ -21,9 +21,9 @@
 
 <p align="center">
   <!-- Contributions Welcome -->
-  <img src="https://img.shields.io/badge/Contributions-Welcome-brightgreen?style=for-the-badge" alt="Contributions Welcome">
+  <img src="https://img.shields.io/badge/Contributions-Welcome-green?style=for-the-badge" alt="Contributions Welcome">
   <!-- PRs Welcome -->
-  <img src="https://img.shields.io/badge/PRs-Welcome-brightgreen?style=for-the-badge&logo=github" alt="PRs Welcome">
+  <img src="https://img.shields.io/badge/PRs-Welcome-green?style=for-the-badge&logo=github" alt="PRs Welcome">
   <!-- Maintained -->
   <img src="https://img.shields.io/badge/Maintained-Yes-green?style=for-the-badge" alt="Maintained">
 </p>
