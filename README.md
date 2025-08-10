@@ -97,13 +97,13 @@ For maximum privacy, use:
 </p>
 
 <p align="center">
-  <img src="assets/images/14.Custom_Logo.png" alt="Custom Logo Settings"><br>
-  <b>Custom Logo Configuration</b>
+  <img src="assets/images/4.Image_Layout.png" alt="Image Layout Options"><br>
+  <b>Image Layout Selection</b>
 </p>
 
 <p align="center">
-  <img src="assets/images/4.Image_Layout.png" alt="Image Layout Options"><br>
-  <b>Image Layout Selection</b>
+  <img src="assets/images/14.Custom_Logo.png" alt="Custom Logo Settings"><br>
+  <b>Custom Logo Configuration</b>
 </p>
 
 <p align="center">
@@ -150,13 +150,6 @@ For maximum privacy, use:
 <p align="center">
   <img src="assets/images/12.Silde_preview.png" alt="Detailed Slide View"><br>
   <b>Slide Details View</b>
-</p>
-
-### Custom Logo Feature
-
-<p align="center">
-  <img src="assets/images/14.Custom_Logo.png" alt="Custom Logo Feature"><br>
-  <b>Custom Logo on Slides</b>
 </p>
 
 ## 🚀 Getting Started
