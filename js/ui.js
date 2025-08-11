@@ -91,6 +91,10 @@ class UiHandler {
         this.logoWidth = 0;
         this.logoHeight = 0;
         
+        // Model select state tracking
+        this.isModelSelectFocused = false;
+        this.isModelSelectOpen = false;
+        
         // Event handlers
         this.setupEventListeners();
         
@@ -147,6 +151,35 @@ class UiHandler {
         // Model selection
         this.elements.modelSelect.addEventListener('change', () => {
             this.onModelSelected();
+        });
+        
+        // Track model select focus state
+        this.elements.modelSelect.addEventListener('focus', () => {
+            this.isModelSelectFocused = true;
+        });
+        
+        this.elements.modelSelect.addEventListener('blur', () => {
+            this.isModelSelectFocused = false;
+            this.isModelSelectOpen = false;
+            
+            // Apply pending model update if exists
+            if (this.pendingModelUpdate) {
+                setTimeout(() => {
+                    // Use timeout to ensure blur has completed
+                    this.populateModelSelect(this.pendingModelUpdate, true);
+                }, 100);
+            }
+        });
+        
+        // Track when dropdown is actually opened (mousedown on select)
+        this.elements.modelSelect.addEventListener('mousedown', () => {
+            // If already focused, this click is opening/closing the dropdown
+            if (this.isModelSelectFocused) {
+                this.isModelSelectOpen = !this.isModelSelectOpen;
+            } else {
+                // First click focuses and opens
+                this.isModelSelectOpen = true;
+            }
         });
         
         // Theme selection
@@ -422,9 +455,31 @@ class UiHandler {
     /**
      * Populate model selection dropdown
      * @param {Array} models - Available models
+     * @param {boolean} forceUpdate - Force update even if dropdown is focused/open
      */
-    populateModelSelect(models) {
+    populateModelSelect(models, forceUpdate = false) {
         const select = this.elements.modelSelect;
+        
+        // Skip update if dropdown is currently focused/open and not forcing update
+        if (!forceUpdate && (this.isModelSelectFocused || this.isModelSelectOpen)) {
+            // Store the models for later update when dropdown is closed
+            this.pendingModelUpdate = models;
+            return;
+        }
+        
+        // Check if models have actually changed
+        const currentOptions = Array.from(select.options).slice(1); // Skip the first "Select Model" option
+        const currentModelIds = currentOptions.map(opt => opt.value);
+        const newModelIds = models.map(model => model.id);
+        
+        // If models haven't changed, don't update
+        if (currentModelIds.length === newModelIds.length && 
+            currentModelIds.every((id, index) => id === newModelIds[index])) {
+            return;
+        }
+        
+        // Remember current selection
+        const currentSelection = select.value;
         
         // Clear existing options
         select.innerHTML = '<option value="" disabled selected>Select Model</option>';
@@ -437,8 +492,16 @@ class UiHandler {
             select.appendChild(option);
         });
         
+        // Restore selection if it still exists
+        if (currentSelection && models.some(m => m.id === currentSelection)) {
+            select.value = currentSelection;
+        }
+        
         // Enable the select
         select.disabled = false;
+        
+        // Clear pending update
+        this.pendingModelUpdate = null;
     }
 
     /**
