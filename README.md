@@ -8,7 +8,7 @@
   <!-- Modern MIT License -->
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge&logo=opensourceinitiative&logoColor=white" alt="License: MIT">
   <!-- Version -->
-  <img src="https://img.shields.io/badge/Version-0.1.0-blue?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Version-0.1.1-blue?style=for-the-badge" alt="Version">
   <!-- JavaScript -->
   <img src="https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor" alt="JavaScript">
   <!-- HTML5 -->
@@ -21,9 +21,9 @@
 
 <p align="center">
   <!-- Contributions Welcome -->
-  <img src="https://img.shields.io/badge/Contributions-Welcome-brightgreen?style=for-the-badge" alt="Contributions Welcome">
+  <img src="https://img.shields.io/badge/Contributions-Welcome-green?style=for-the-badge" alt="Contributions Welcome">
   <!-- PRs Welcome -->
-  <img src="https://img.shields.io/badge/PRs-Welcome-brightgreen?style=for-the-badge&logo=github" alt="PRs Welcome">
+  <img src="https://img.shields.io/badge/PRs-Welcome-green?style=for-the-badge&logo=github" alt="PRs Welcome">
   <!-- Maintained -->
   <img src="https://img.shields.io/badge/Maintained-Yes-green?style=for-the-badge" alt="Maintained">
 </p>
@@ -47,6 +47,7 @@ A powerful AI-driven web application that generates professional PowerPoint pres
 - **Smart Context Understanding**: Upload PDF/text files for context-aware presentations
 - **Real Stock Images**: Optional integration with Pexels API for professional imagery
 - **Theme System**: 6 professionally designed themes including a fully customizable option
+- **Custom Logo Support**: Add your company/personal logo to all slides with flexible positioning
 - **Interactive Editing**: Add custom slides at any position post-generation
 - **Real-time Preview**: See your presentation as it's being created
 - **Instant Download**: Export as standard PPTX files compatible with PowerPoint
@@ -72,90 +73,84 @@ For maximum privacy, use:
 ## 📸 Screenshots
 
 ### Configuration
-<table>
-  <tr>
-    <td align="center">
-      <img src="assets/images/1.Settings_local_LLM.png" alt="Local LLM Settings" width="400"><br>
-      <b>Local LLM Configuration</b>
-    </td>
-    <td align="center">
-      <img src="assets/images/2.Settings_OpenRouter_Pexels_APIs.png" alt="OpenRouter and Pexels API Settings" width="400"><br>
-      <b>OpenRouter & Pexels API Setup</b>
-    </td>
-  </tr>
-</table>
+
+<p align="center">
+  <img src="assets/images/1.Settings_local_LLM.png" alt="Local LLM Settings"><br>
+  <b>Local LLM Configuration</b>
+</p>
+
+<p align="center">
+  <img src="assets/images/2.Settings_OpenRouter_Pexels_APIs.png" alt="OpenRouter and Pexels API Settings"><br>
+  <b>OpenRouter & Pexels API Setup</b>
+</p>
 
 ### Presentation Creation
-<table>
-  <tr>
-    <td align="center">
-      <img src="assets/images/3.Presentation_Settings.png" alt="Presentation Settings" width="400"><br>
-      <b>Presentation Configuration</b>
-    </td>
-    <td align="center">
-      <img src="assets/images/13.Custom_Theme.png" alt="Custom Theme Settings" width="400"><br>
-      <b>Custom Theme Configuration</b>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="assets/images/4.Image_Layout.png" alt="Image Layout Options" width="400"><br>
-      <b>Image Layout Selection</b>
-    </td>
-    <td align="center">
-      <img src="assets/images/5.PDF_Upload.png" alt="PDF Upload Feature" width="400"><br>
-      <b>PDF Context Upload</b>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="assets/images/6.Generation.png" alt="Generation Progress" width="400"><br>
-      <b>Real-time Generation Progress</b>
-    </td>
-  </tr>
-</table>
+
+<p align="center">
+  <img src="assets/images/3.Presentation_Settings.png" alt="Presentation Settings"><br>
+  <b>Presentation Configuration</b>
+</p>
+
+<p align="center">
+  <img src="assets/images/13.Custom_Theme.png" alt="Custom Theme Settings"><br>
+  <b>Custom Theme Configuration</b>
+</p>
+
+<p align="center">
+  <img src="assets/images/4.Image_Layout.png" alt="Image Layout Options"><br>
+  <b>Image Layout Selection</b>
+</p>
+
+<p align="center">
+  <img src="assets/images/14.Custom_Logo.png" alt="Custom Logo Settings"><br>
+  <b>Custom Logo Configuration</b>
+</p>
+
+<p align="center">
+  <img src="assets/images/5.PDF_Upload.png" alt="PDF Upload Feature"><br>
+  <b>PDF Context Upload</b>
+</p>
+
+<p align="center">
+  <img src="assets/images/6.Generation.png" alt="Generation Progress"><br>
+  <b>Real-time Generation Progress</b>
+</p>
 
 ### Preview & Management
-<table>
-  <tr>
-    <td align="center">
-      <img src="assets/images/7.Slide_Preview.png" alt="Slide Preview Grid" width="400"><br>
-      <b>Interactive Slide Preview</b>
-    </td>
-</table>
+
+<p align="center">
+  <img src="assets/images/7.Slide_Preview.png" alt="Slide Preview Grid"><br>
+  <b>Interactive Slide Preview</b>
+</p>
 
 ### Custom Slide Addition
-<table>
-  <tr>
-    <td align="center">
-      <img src="assets/images/8.Add_new_slide.png" alt="Add New Slide Button" width="400"><br>
-      <b>Add Slide Interface</b>
-    </td>
-    <td align="center">
-      <img src="assets/images/9.Single_Slide_generation.png" alt="Single Slide Generation" width="400"><br>
-      <b>Custom Slide Creation</b>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="assets/images/10.Added_Slide_preview.png" alt="Added Slide Preview" width="400"><br>
-      <b>Newly Added Slide</b>
-    </td>
-</table>
+
+<p align="center">
+  <img src="assets/images/8.Add_new_slide.png" alt="Add New Slide Button"><br>
+  <b>Add Slide Interface</b>
+</p>
+
+<p align="center">
+  <img src="assets/images/9.Single_Slide_generation.png" alt="Single Slide Generation"><br>
+  <b>Custom Slide Creation</b>
+</p>
+
+<p align="center">
+  <img src="assets/images/10.Added_Slide_preview.png" alt="Added Slide Preview"><br>
+  <b>Newly Added Slide</b>
+</p>
 
 ### Generated Presentation Example
-<table>
-  <tr>
-    <td align="center">
-      <img src="assets/images/11.Presentation_Generated.png" alt="Final Presentation" width="400"><br>
-      <b>Complete Presentation</b>
-    </td>
-    <td align="center">
-      <img src="assets/images/12.Silde_preview.png" alt="Detailed Slide View" width="400"><br>
-      <b>Slide Details View</b>
-    </td>
-  </tr>
-</table>
+
+<p align="center">
+  <img src="assets/images/11.Presentation_Generated.png" alt="Final Presentation"><br>
+  <b>Complete Presentation</b>
+</p>
+
+<p align="center">
+  <img src="assets/images/12.Silde_preview.png" alt="Detailed Slide View"><br>
+  <b>Slide Details View</b>
+</p>
 
 ## 🚀 Getting Started
 
@@ -195,6 +190,7 @@ For maximum privacy, use:
    - **Complexity**: Simple (basic), Standard (balanced), or Detailed (comprehensive)
    - **Slide Count**: 5-20 slides
    - **Theme**: Choose from 6 options including Custom
+   - **Logo** (Optional): Upload PNG/JPG logo, choose position and size
    - **Model**: Select based on your provider
 
 4. **Generate & Download**:
@@ -222,6 +218,22 @@ Create your own personalized theme with complete control:
 4. **Color Customization**: Click any color swatch to open a color picker
 5. **Real-time Preview**: See changes instantly as you customize
 6. **Persistent Settings**: Your custom theme saves automatically
+
+### Custom Logo Integration
+
+Add professional branding to your presentations:
+
+1. **Upload Logo**: Support for PNG/JPG images up to 5MB
+2. **Position Options**: 
+   - Top Right (default) - Professional placement
+   - Bottom Left - Alternative positioning
+3. **Size Selection**:
+   - Small (5% of slide height)
+   - Medium (7% of slide height)
+   - Large (10% of slide height)
+4. **Automatic Aspect Ratio**: Logo proportions preserved on all slides
+5. **Visual Preview**: See logo placement before generation
+6. **Persistent Storage**: Logo settings saved for future use
 
 ## 💡 Recommendations
 
@@ -326,10 +338,12 @@ Custom slides: Add specific client case studies using the + button
 Prompt: "Create a presentation about our quarterly results"
 Settings: Local LLM, Standard complexity, Theme: Custom, Placeholders
 Custom theme: Brand colors (#1E3A8A primary, #F59E0B accent), Roboto font
+Logo: Company logo, Top Right position, Medium size
 ```
 
 ## 🌟 Latest Updates
 
+- **Custom Logo Feature**: Upload and position company logos on all slides
 - **Custom Theme Feature**: Create personalized themes with interactive controls
 - **Theme System**: 6 themes including fully customizable option
 - **Single Slide Addition**: Context-aware custom slide insertion

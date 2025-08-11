@@ -10,6 +10,13 @@ class PresentationBuilder {
         this.useRealImages = false; // Whether to use real images from Pexels
         this.imageCache = new Map(); // Cache for fetched images
         
+        // Logo properties
+        this.logoData = null; // Base64 encoded logo data
+        this.logoPosition = 'top-right'; // 'top-right' or 'bottom-left'
+        this.logoSize = 'small'; // 'small', 'medium', or 'large'
+        this.logoWidth = 0; // Original logo width
+        this.logoHeight = 0; // Original logo height
+        
         // Define available themes
         this.themes = {
             professional: {
@@ -140,6 +147,89 @@ class PresentationBuilder {
             this.saveCustomTheme();
         }
     }
+    
+    /**
+     * Set logo configuration
+     * @param {string} logoData - Base64 encoded logo data
+     * @param {string} position - Logo position ('top-right' or 'bottom-left')
+     * @param {string} size - Logo size ('small', 'medium', or 'large')
+     * @param {number} width - Original logo width
+     * @param {number} height - Original logo height
+     */
+    setLogo(logoData, position, size, width = 0, height = 0) {
+        this.logoData = logoData;
+        this.logoPosition = position || 'top-right';
+        this.logoSize = size || 'small';
+        this.logoWidth = width;
+        this.logoHeight = height;
+    }
+    
+    /**
+     * Clear logo configuration
+     */
+    clearLogo() {
+        this.logoData = null;
+        this.logoPosition = 'top-right';
+        this.logoSize = 'small';
+        this.logoWidth = 0;
+        this.logoHeight = 0;
+    }
+    
+    /**
+     * Add logo to a slide
+     * @param {object} slide - PptxGenJS slide object
+     */
+    addLogoToSlide(slide) {
+        if (!this.logoData) {
+            return;
+        }
+        
+        // Define height mappings (percentage of slide height)
+        const heightMap = {
+            'small': 0.05,    // 5% of slide height
+            'medium': 0.07,   // 7% of slide height
+            'large': 0.10     // 10% of slide height
+        };
+        
+        // Slide aspect ratio (16:9 for widescreen presentations)
+        const slideAspectRatio = 16 / 9;
+        
+        // Fix the height based on size setting
+        const heightPercent = heightMap[this.logoSize] * 100;
+        
+        // Calculate logo aspect ratio
+        const logoAspectRatio = this.logoWidth > 0 && this.logoHeight > 0 ? 
+            this.logoWidth / this.logoHeight : 1;
+        
+        // Calculate width to maintain aspect ratio
+        // Account for slide aspect ratio when converting height% to width%
+        const widthPercent = (heightPercent * logoAspectRatio) / slideAspectRatio;
+        
+        // Build logo configuration with both width and height
+        let logoConfig = {
+            data: this.logoData,
+            h: `${heightPercent}%`,
+            w: `${widthPercent}%`
+        };
+        
+        // Calculate position based on selected option
+        if (this.logoPosition === 'top-right') {
+            // Position in top-right corner
+            logoConfig.x = `${95 - widthPercent}%`;
+            logoConfig.y = '5%';
+        } else if (this.logoPosition === 'bottom-left') {
+            // Position in bottom-left corner
+            logoConfig.x = '5%';
+            logoConfig.y = `${95 - heightPercent}%`;
+        }
+        
+        // Add the logo image to the slide
+        try {
+            slide.addImage(logoConfig);
+        } catch (error) {
+            console.error('Error adding logo to slide:', error);
+        }
+    }
 
     /**
      * Initialize a new presentation
@@ -210,6 +300,9 @@ class PresentationBuilder {
         const slide = this.pptx.addSlide();
         const theme = this.getCurrentTheme();
         
+        // Add logo if configured
+        this.addLogoToSlide(slide);
+        
         // Add title
         slide.addText(title, {
             x: '10%',
@@ -259,6 +352,9 @@ class PresentationBuilder {
     async createContentSlide(slideData) {
         const slide = this.pptx.addSlide();
         const theme = this.getCurrentTheme();
+        
+        // Add logo if configured
+        this.addLogoToSlide(slide);
         
         // Determine layout type with intelligent fallback
         let layout = slideData.imageLayout || 'none';
@@ -694,6 +790,9 @@ class PresentationBuilder {
     createClosingSlide() {
         const slide = this.pptx.addSlide();
         const theme = this.getCurrentTheme();
+        
+        // Add logo if configured
+        this.addLogoToSlide(slide);
         
         // Add thank you message
         slide.addText('Thank You', {

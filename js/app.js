@@ -158,6 +158,19 @@ class App {
             // Set whether to use real images
             presentationBuilder.setUseRealImages(inputValues.useRealImages);
             
+            // Set logo if configured
+            if (inputValues.logoSettings && inputValues.logoSettings.data) {
+                presentationBuilder.setLogo(
+                    inputValues.logoSettings.data,
+                    inputValues.logoSettings.position,
+                    inputValues.logoSettings.size,
+                    inputValues.logoSettings.width,
+                    inputValues.logoSettings.height
+                );
+            } else {
+                presentationBuilder.clearLogo();
+            }
+            
             // Initialize presentation builder with the data and original prompt
             console.log('Initializing presentation with data:', presentationData);
             presentationBuilder.initialize(presentationData, inputValues.prompt);
