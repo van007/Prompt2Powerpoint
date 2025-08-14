@@ -217,13 +217,13 @@ class ApiClient {
             
             // Add image layout instructions if a layout is selected
             if (imageLayout && imageLayout !== 'none') {
-                const imageType = useRealImages ? 'real images from Pexels' : 'image placeholders';
+                const imageType = useRealImages ? 'real images' : 'image placeholders';
                 systemMessage += `\n\nIMPORTANT: You MUST include ${imageType} in EVERY slide. For each slide, you MUST:
                 1. Include an "imageLayout" field with the value "${imageLayout}"
                 2. Include an "imageDescription" field with a detailed description for finding the right image`;
                 
                 if (useRealImages) {
-                    systemMessage += `\n\nSince real images will be fetched from Pexels, create imageDescription as EXACTLY 2 WORDS that combine:
+                    systemMessage += `\n\nSince real images will be fetched, create imageDescription as EXACTLY 2 WORDS that combine:
                     1. The presentation's overall theme: "${prompt.substring(0, 100)}..."
                     2. The specific slide's topic (from the slide title)
                     
@@ -538,12 +538,12 @@ class ApiClient {
     "notes": "Speaker notes for this slide"`;
             
             if (imageLayout && imageLayout !== 'none') {
-                const imageType = useRealImages ? 'real image from Pexels' : 'image placeholder';
+                const imageType = useRealImages ? 'real image' : 'image placeholder';
                 systemMessage += `\n\nFor this slide, you MUST use the "${imageLayout}" layout with a ${imageType}.`;
                 
                 if (useRealImages) {
                     const presentationContext = context.originalPrompt ? context.originalPrompt.substring(0, 100) : 'business presentation';
-                    systemMessage += `\n\nSince a real image will be fetched from Pexels, create imageDescription as EXACTLY 2 WORDS that intelligently combine:
+                    systemMessage += `\n\nSince a real image will be fetched, create imageDescription as EXACTLY 2 WORDS that intelligently combine:
                     1. The overall presentation theme: "${presentationContext}..."
                     2. This specific slide's title: "${title}"
                     

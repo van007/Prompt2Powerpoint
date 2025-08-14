@@ -5,7 +5,6 @@
 ### Current Implementation
 This application stores API keys securely in the browser's localStorage:
 - **OpenRouter API Key**: Stored as `openrouter_api_key`
-- **Pexels API Key**: Stored as `pexels_api_key`
 
 ### Why This is Secure
 1. **No File Storage**: API keys are never written to any files in the project directory
@@ -33,7 +32,7 @@ This application stores API keys securely in the browser's localStorage:
 #### Adding New API Integrations
 If you need to add support for new APIs:
 
-1. **Use localStorage**: Follow the existing pattern in `api.js` and `pexelsClient.js`
+1. **Use localStorage**: Follow the existing pattern in `api.js`
    ```javascript
    localStorage.setItem('your_api_key', apiKey);
    ```
@@ -67,7 +66,6 @@ If you discover a security vulnerability:
 
 ### Additional Resources
 - [OpenRouter API Documentation](https://openrouter.ai/docs)
-- [Pexels API Documentation](https://www.pexels.com/api/documentation/)
 - [OWASP API Security](https://owasp.org/www-project-api-security/)
 
 ---

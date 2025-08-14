@@ -543,25 +543,11 @@ class PresentationBuilder {
             h: '35%'
         };
         
-        // Try to use real image if enabled
-        if (this.useRealImages) {
-            const imageData = await this.fetchImageForSlide(slideData, 'full-width');
-            if (imageData) {
-                await this.addRealImage(slide, imageData, imageOptions);
-            } else {
-                // Fallback to placeholder
-                this.addImagePlaceholder(slide, {
-                    ...imageOptions,
-                    altText: slideData.imageDescription || 'Right Click -> Change Picture -> Choose Option to Replace'
-                });
-            }
-        } else {
-            // Use placeholder
-            this.addImagePlaceholder(slide, {
-                ...imageOptions,
-                altText: slideData.imageDescription || 'Right Click -> Change Picture -> Choose Option to Replace'
-            });
-        }
+        // For now, always use placeholder (real images to be implemented later)
+        this.addImagePlaceholder(slide, {
+            ...imageOptions,
+            altText: slideData.imageDescription || 'Right Click -> Change Picture -> Choose Option to Replace'
+        });
         
         // Add content below image
         if (slideData.content && Array.isArray(slideData.content)) {
@@ -591,23 +577,11 @@ class PresentationBuilder {
             h: '65%'
         };
         
-        // Try to use real image if enabled
-        if (this.useRealImages) {
-            const imageData = await this.fetchImageForSlide(slideData, 'side-by-side');
-            if (imageData) {
-                await this.addRealImage(slide, imageData, imageOptions);
-            } else {
-                this.addImagePlaceholder(slide, {
-                    ...imageOptions,
-                    altText: slideData.imageDescription || 'Right Click -> Change Picture -> Choose Option to Replace'
-                });
-            }
-        } else {
-            this.addImagePlaceholder(slide, {
-                ...imageOptions,
-                altText: slideData.imageDescription || 'Right Click -> Change Picture -> Choose Option to Replace'
-            });
-        }
+        // For now, always use placeholder (real images to be implemented later)
+        this.addImagePlaceholder(slide, {
+            ...imageOptions,
+            altText: slideData.imageDescription || 'Right Click -> Change Picture -> Choose Option to Replace'
+        });
         
         // Add content on right
         if (slideData.content && Array.isArray(slideData.content)) {
@@ -654,22 +628,11 @@ class PresentationBuilder {
             h: '35%'
         };
         
-        if (this.useRealImages) {
-            const imageData = await this.fetchImageForSlide(slideData, 'text-focus');
-            if (imageData) {
-                await this.addRealImage(slide, imageData, imageOptions);
-            } else {
-                this.addImagePlaceholder(slide, {
-                    ...imageOptions,
-                    altText: slideData.imageDescription || 'Right Click -> Change Picture -> Choose Option to Replace'
-                });
-            }
-        } else {
-            this.addImagePlaceholder(slide, {
-                ...imageOptions,
-                altText: slideData.imageDescription || 'Right Click -> Change Picture -> Choose Option to Replace'
-            });
-        }
+        // For now, always use placeholder (real images to be implemented later)
+        this.addImagePlaceholder(slide, {
+            ...imageOptions,
+            altText: slideData.imageDescription || 'Right Click -> Change Picture -> Choose Option to Replace'
+        });
     }
     
     /**
@@ -683,23 +646,11 @@ class PresentationBuilder {
             h: '100%'
         };
         
-        // Try to use real image if enabled
-        if (this.useRealImages) {
-            const imageData = await this.fetchImageForSlide(slideData, 'background');
-            if (imageData) {
-                await this.addRealImage(slide, imageData, imageOptions);
-            } else {
-                this.addImagePlaceholder(slide, {
-                    ...imageOptions,
-                    altText: slideData.imageDescription || 'Right Click -> Change Picture -> Choose Option to Replace'
-                });
-            }
-        } else {
-            this.addImagePlaceholder(slide, {
-                ...imageOptions,
-                altText: slideData.imageDescription || 'Right Click -> Change Picture -> Choose Option to Replace'
-            });
-        }
+        // For now, always use placeholder (real images to be implemented later)
+        this.addImagePlaceholder(slide, {
+            ...imageOptions,
+            altText: slideData.imageDescription || 'Right Click -> Change Picture -> Choose Option to Replace'
+        });
         
         // Add semi-transparent background for title
         slide.addShape(this.pptx.ShapeType.rect, {
@@ -1045,91 +996,6 @@ class PresentationBuilder {
      */
     setUseRealImages(useReal) {
         this.useRealImages = useReal;
-    }
-    
-    /**
-     * Add real image from Pexels to slide
-     * @param {object} slide - PptxGenJS slide object
-     * @param {object} imageData - Image data from Pexels
-     * @param {object} options - Placement options
-     */
-    async addRealImage(slide, imageData, options) {
-        const defaults = {
-            x: '5%',
-            y: '25%',
-            w: '90%',
-            h: '50%'
-        };
-        
-        const config = { ...defaults, ...options };
-        
-        try {
-            // Add the real image
-            slide.addImage({
-                path: imageData.url,
-                x: config.x,
-                y: config.y,
-                w: config.w,
-                h: config.h,
-                altText: imageData.alt || 'Image from Pexels'
-            });
-            
-            // Add attribution to speaker notes
-            const currentNotes = slide._slideObjects.filter(obj => obj._type === 'notes')[0];
-            const existingNotes = currentNotes ? currentNotes.text : '';
-            const attribution = `\n\n${imageData.attribution.text}`;
-            
-            if (!existingNotes.includes(attribution)) {
-                slide.addNotes(existingNotes + attribution);
-            }
-            
-            return true;
-        } catch (error) {
-            console.error('Error adding real image:', error);
-            // Fallback to placeholder
-            this.addImagePlaceholder(slide, options);
-            return false;
-        }
-    }
-    
-    /**
-     * Fetch and cache image for slide
-     * @param {object} slideData - Slide data containing image description
-     * @param {string} layout - Layout type
-     * @returns {Promise<object|null>} - Image data or null
-     */
-    async fetchImageForSlide(slideData, layout) {
-        if (!pexelsClient.hasApiKey()) {
-            return null;
-        }
-        
-        const cacheKey = `${slideData.title}-${layout}`;
-        
-        // Check cache first
-        if (this.imageCache.has(cacheKey)) {
-            return this.imageCache.get(cacheKey);
-        }
-        
-        try {
-            // Use image description if available, otherwise use slide title and content
-            const searchContext = slideData.imageDescription || 
-                                `${slideData.title} ${slideData.content ? slideData.content[0] : ''}`;
-            
-            // Get theme colors for better image matching
-            const themeColors = this.getCurrentTheme();
-            
-            const imageData = await pexelsClient.getImageForSlide(searchContext, layout, themeColors);
-            
-            if (imageData) {
-                // Cache the result
-                this.imageCache.set(cacheKey, imageData);
-                return imageData;
-            }
-        } catch (error) {
-            console.error('Error fetching image for slide:', error);
-        }
-        
-        return null;
     }
 }
 

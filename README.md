@@ -37,7 +37,7 @@
   <img src="https://img.shields.io/badge/Fonts-Google_Fonts-4285F4?style=for-the-badge&logo=google-fonts&logoColor=white" alt="Google Fonts">
 </p>
 
-A powerful AI-driven web application that generates professional PowerPoint presentations using LLM APIs. Support for both privacy-focused local LLM servers and cloud-based OpenRouter API, with optional real image integration via Pexels.
+A powerful AI-driven web application that generates professional PowerPoint presentations using LLM APIs. Support for both privacy-focused local LLM servers and cloud-based OpenRouter API.
 
 ## 🚀 Key Features
 
@@ -45,7 +45,7 @@ A powerful AI-driven web application that generates professional PowerPoint pres
 - **Multi-Provider AI Generation**: Choose between local LLM servers or OpenRouter cloud API
 - **Privacy-First Options**: Keep your data completely private with local LLM processing
 - **Smart Context Understanding**: Upload PDF/text files for context-aware presentations
-- **Real Stock Images**: Optional integration with Pexels API for professional imagery
+- **Image Support**: Flexible image layouts with placeholder support
 - **Theme System**: 6 professionally designed themes including a fully customizable option
 - **Custom Logo Support**: Add your company/personal logo to all slides with flexible positioning
 - **Interactive Editing**: Add custom slides at any position post-generation
@@ -55,7 +55,7 @@ A powerful AI-driven web application that generates professional PowerPoint pres
 ### Image Generation Options
 1. **No Images**: Clean, text-only presentations for maximum focus
 2. **Image Placeholders**: Transparent placeholders that can be manually replaced in PowerPoint
-3. **Real Images** (Experimental): AI-selected stock photos from Pexels based on slide content
+3. **Real Images**: Support for real images (implementation coming soon)
 
 ### Image Layouts (when images are enabled)
 - **Full Width**: Image at top, text content below
@@ -80,8 +80,8 @@ For maximum privacy, use:
 </p>
 
 <p align="center">
-  <img src="assets/images/2.Settings_OpenRouter_Pexels_APIs.png" alt="OpenRouter and Pexels API Settings"><br>
-  <b>OpenRouter & Pexels API Setup</b>
+  <img src="assets/images/2.Settings_OpenRouter_Pexels_APIs.png" alt="OpenRouter API Settings"><br>
+  <b>OpenRouter API Setup</b>
 </p>
 
 ### Presentation Creation
@@ -167,10 +167,10 @@ For maximum privacy, use:
 4. Enter your API key
 5. Select from available cloud models
 
-### Option 3: Real Images with Pexels (Optional)
-1. Get a free API key from <a href="https://www.pexels.com/api/" target="_blank">Pexels</a>
-2. Add the key in Settings
-3. Toggle "Use Real Images" in the image options
+### Option 3: Image Options
+1. Choose between image placeholders or no images
+2. Select from various image layout options
+3. Real image support coming soon
 
 ## 📝 Usage Guide
 
@@ -267,7 +267,6 @@ Add professional branding to your presentations:
 - `fileHandler.js` - PDF/text file processing
 - `presentationBuilder.js` - PPTX generation with themes
 - `ui.js` - User interface management
-- `pexelsClient.js` - Stock image integration
 
 ### API Integrations
 1. **Local LLM Server**
@@ -277,11 +276,6 @@ Add professional branding to your presentations:
 2. **OpenRouter API**
    - Access to multiple cloud models
    - Built-in rate limiting and error handling
-
-3. **Pexels API**
-   - Smart query optimization
-   - Intelligent caching system
-   - Rate limit: 180 requests/hour
 
 ### External Dependencies
 All loaded via CDN - no installation required:
@@ -362,8 +356,7 @@ prompt-2-powerpoint/
 │   ├── api.js          # LLM provider management
 │   ├── fileHandler.js  # PDF/text processing
 │   ├── presentationBuilder.js # PPTX generation
-│   ├── ui.js           # Interface management
-│   └── pexelsClient.js # Image API integration
+│   └── ui.js           # Interface management
 └── README.md           # This file
 ```
 
@@ -381,4 +374,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Note**: This application processes all data locally in your browser. When using cloud services (OpenRouter, Pexels), please review their respective privacy policies.
+**Note**: This application processes all data locally in your browser. When using cloud services (OpenRouter), please review their respective privacy policies.

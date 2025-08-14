@@ -172,7 +172,7 @@
                 </label>
                 <p class="toggle-description" id="image-type-description">
                     <span class="placeholder-desc">Image placeholders will be added that you can replace later in PowerPoint</span>
-                    <span class="real-images-desc" style="display: none;">Real images will be fetched from Pexels based on slide content</span>
+                    <span class="real-images-desc" style="display: none;">Real images will be fetched based on slide content</span>
                 </p>
             </div>
             
@@ -385,14 +385,6 @@
                         <p class="hint">Get your API key from <a href="https://openrouter.ai/keys" target="_blank" rel="noopener">openrouter.ai/keys</a></p>
                     </div>
                     
-                    <!-- Pexels API Settings -->
-                    <div class="form-group" id="pexels-settings">
-                        <hr class="settings-divider">
-                        <label for="pexels-api-key-input">Pexels API Key (for Real Images)</label>
-                        <input type="password" id="pexels-api-key-input" placeholder="Your Pexels API key">
-                        <p class="hint">Get your free API key from <a href="https://www.pexels.com/api/" target="_blank" rel="noopener">pexels.com/api</a></p>
-                    </div>
-                    
                     <div class="form-buttons">
                         <button type="button" id="reset-url-btn" class="reset-btn">Reset to Default</button>
                         <button type="submit" id="save-url-btn" class="save-btn">Save & Connect</button>
@@ -434,7 +426,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.all.min.js"></script>
     <script src="js/api.js"></script>
     <script src="js/fileHandler.js"></script>
-    <script src="js/pexelsClient.js"></script>
     <script src="js/presentationBuilder.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/app.js"></script>

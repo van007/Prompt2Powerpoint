@@ -61,9 +61,6 @@ class UiHandler {
             placeholderDesc: document.querySelector('.placeholder-desc'),
             realImagesDesc: document.querySelector('.real-images-desc'),
             
-            // Pexels API
-            pexelsApiKeyInput: document.getElementById('pexels-api-key-input'),
-            
             // Font selects
             headingFontSelect: document.getElementById('heading-font-select'),
             bodyFontSelect: document.getElementById('body-font-select'),
@@ -270,12 +267,6 @@ class UiHandler {
             this.elements.apiKeyInput.value = apiClient.openRouterApiKey;
         }
         
-        // Set Pexels API key if available
-        const savedPexelsKey = pexelsClient.loadSavedApiKey();
-        if (savedPexelsKey && this.elements.pexelsApiKeyInput) {
-            this.elements.pexelsApiKeyInput.value = savedPexelsKey;
-        }
-        
         // Show/hide appropriate settings
         this.onProviderChanged();
     }
@@ -342,12 +333,6 @@ class UiHandler {
             
             // Update API key
             apiClient.setOpenRouterApiKey(apiKey);
-        }
-        
-        // Save Pexels API key if provided
-        const pexelsApiKey = this.elements.pexelsApiKeyInput.value.trim();
-        if (pexelsApiKey) {
-            pexelsClient.setApiKey(pexelsApiKey);
         }
         
         // Show loading
@@ -1036,17 +1021,8 @@ class UiHandler {
             this.elements.realImagesDesc.style.display = useRealImages ? 'inline' : 'none';
         }
         
-        // Check if Pexels API key is configured when real images are selected
-        if (useRealImages && !pexelsClient.hasApiKey()) {
-            // Load saved key
-            const savedKey = pexelsClient.loadSavedApiKey();
-            if (!savedKey) {
-                this.showError('Please configure your Pexels API key in settings to use real images', 'API Key Required');
-                // Reset toggle
-                this.elements.useRealImagesToggle.checked = false;
-                this.onImageTypeToggled(); // Recursive call to update UI
-            }
-        }
+        // Note: Real image functionality will be implemented later
+        // For now, both options will use placeholders
     }
     
     /**
