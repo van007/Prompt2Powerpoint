@@ -52,10 +52,9 @@ A powerful AI-driven web application that generates professional PowerPoint pres
 - **Real-time Preview**: See your presentation as it's being created
 - **Instant Download**: Export as standard PPTX files compatible with PowerPoint
 
-### Image Generation Options
+### Image Options
 1. **No Images**: Clean, text-only presentations for maximum focus
 2. **Image Placeholders**: Transparent placeholders that can be manually replaced in PowerPoint
-3. **Real Images**: Support for real images (implementation coming soon)
 
 ### Image Layouts (when images are enabled)
 - **Full Width**: Image at top, text content below
@@ -167,10 +166,10 @@ For maximum privacy, use:
 4. Enter your API key
 5. Select from available cloud models
 
-### Option 3: Image Options
+### Option 3: Configure Your Presentation
 1. Choose between image placeholders or no images
 2. Select from various image layout options
-3. Real image support coming soon
+3. Customize theme and add logo if desired
 
 ## 📝 Usage Guide
 
@@ -178,7 +177,7 @@ For maximum privacy, use:
 
 1. **Choose Your Setup**:
    - Select provider (Local LLM or OpenRouter)
-   - Choose image preference (None, Placeholders, or Real Images)
+   - Choose image preference (None or Placeholders)
    - Pick a theme from 6 options (including Custom for full control)
 
 2. **Provide Context**:
@@ -240,7 +239,6 @@ Add professional branding to your presentations:
 ### For Best Results:
 - **Use OpenRouter with PDF uploads** for presentations requiring large context
 - **Use Local LLM with placeholders** for maximum privacy
-- **Enable real images** only for final presentations (experimental)
 - **Upload relevant PDFs** to improve content accuracy
 - **Use the single slide add feature** to customize presentation flow
 
@@ -309,7 +307,7 @@ Presentation generated using the sample PDF as Local LLM gemma-3-27b-it
 ### Example 1: Company Overview Presentation
 ```
 Prompt: "Create a 10-slide presentation about our sustainable technology startup"
-Settings: OpenRouter, Standard complexity, Theme: Modern, Real Images
+Settings: OpenRouter, Standard complexity, Theme: Modern, Placeholders
 Upload: company-overview.pdf
 ```
 
@@ -323,7 +321,7 @@ Upload: security-guidelines.pdf
 ### Example 3: Sales Pitch
 ```
 Prompt: "Generate a sales pitch for our new AI-powered analytics platform"
-Settings: OpenRouter, Simple complexity, Theme: Corporate, Real Images
+Settings: OpenRouter, Simple complexity, Theme: Corporate, Placeholders
 Custom slides: Add specific client case studies using the + button
 ```
 
