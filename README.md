@@ -55,6 +55,7 @@ A powerful AI-driven web application that generates professional PowerPoint pres
 ### Image Options
 1. **No Images**: Clean, text-only presentations for maximum focus
 2. **Image Placeholders**: Transparent placeholders that can be manually replaced in PowerPoint
+3. **Local Images**: Use your own images from the `assets/images/` folder with intelligent keyword matching
 
 ### Image Layouts (when images are enabled)
 - **Full Width**: Image at top, text content below
@@ -66,7 +67,7 @@ A powerful AI-driven web application that generates professional PowerPoint pres
 
 For maximum privacy, use:
 - **Local LLM** via LM Studio or compatible server
-- **Image Placeholders** instead of real images
+- **Local Images** stored on your machine or **Image Placeholders**
 - All processing happens in your browser - no data sent to external servers (except when using cloud options)
 
 ## 📸 Screenshots
@@ -167,9 +168,16 @@ For maximum privacy, use:
 5. Select from available cloud models
 
 ### Option 3: Configure Your Presentation
-1. Choose between image placeholders or no images
+1. Choose between no images, placeholders, or local images
 2. Select from various image layout options
 3. Customize theme and add logo if desired
+
+### Option 4: Set Up Local Images (Optional)
+1. Add your images to the `assets/images/` folder
+2. Update `assets/images/manifest.json` with your image filenames
+3. Use descriptive filenames with keywords (e.g., `team-collaboration.jpg`)
+4. Toggle "Use Local Images" in the app to activate
+5. The app will automatically match images to slide content
 
 ## 📝 Usage Guide
 
@@ -177,7 +185,7 @@ For maximum privacy, use:
 
 1. **Choose Your Setup**:
    - Select provider (Local LLM or OpenRouter)
-   - Choose image preference (None or Placeholders)
+   - Choose image preference (None, Placeholders, or Local Images)
    - Pick a theme from 6 options (including Custom for full control)
 
 2. **Provide Context**:
@@ -234,13 +242,39 @@ Add professional branding to your presentations:
 5. **Visual Preview**: See logo placement before generation
 6. **Persistent Storage**: Logo settings saved for future use
 
+### Local Images Feature
+
+Use your own images with intelligent matching:
+
+1. **Setup Images**:
+   - Place images in `assets/images/` folder
+   - Update `manifest.json` with image filenames
+   - Use descriptive filenames with keywords
+
+2. **Naming Best Practices**:
+   - Use hyphens to separate keywords: `team-collaboration.jpg`
+   - Include relevant terms: `data-analytics-dashboard.png`
+   - Multiple keywords improve matching: `innovation-technology-future.jpg`
+
+3. **Automatic Matching**:
+   - AI analyzes slide titles and content
+   - Matches keywords from filenames
+   - Selects best image for each slide
+   - Falls back to random image if no match
+
+4. **Supported Formats**:
+   - JPG/JPEG, PNG, GIF, WebP, SVG
+   - Images are cached for performance
+   - All processing happens locally
+
 ## 💡 Recommendations
 
 ### For Best Results:
 - **Use OpenRouter with PDF uploads** for presentations requiring large context
-- **Use Local LLM with placeholders** for maximum privacy
+- **Use Local LLM with local images** for maximum privacy and control
 - **Upload relevant PDFs** to improve content accuracy
 - **Use the single slide add feature** to customize presentation flow
+- **Name local images descriptively** for better automatic matching
 
 ### Provider Comparison:
 | Feature | Local LLM | OpenRouter |
@@ -335,6 +369,7 @@ Logo: Company logo, Top Right position, Medium size
 
 ## 🌟 Latest Updates
 
+- **Local Images Support**: Use your own images with intelligent keyword matching
 - **Custom Logo Feature**: Upload and position company logos on all slides
 - **Custom Theme Feature**: Create personalized themes with interactive controls
 - **Theme System**: 6 themes including fully customizable option
@@ -355,6 +390,10 @@ prompt-2-powerpoint/
 │   ├── fileHandler.js  # PDF/text processing
 │   ├── presentationBuilder.js # PPTX generation
 │   └── ui.js           # Interface management
+├── assets/
+│   └── images/         # Local images folder
+│       ├── manifest.json    # Image list configuration
+│       └── README-Images.md # Image setup guide
 └── README.md           # This file
 ```
 
