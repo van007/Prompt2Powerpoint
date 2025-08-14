@@ -74,80 +74,80 @@ For maximum privacy, use:
 ### Configuration
 
 <p align="center">
-  <img src="assets/images/1.Settings_local_LLM.png" alt="Local LLM Settings"><br>
+  <img src="assets/screenshots-app/1.Settings_local_LLM.png" alt="Local LLM Settings"><br>
   <b>Local LLM Configuration</b>
 </p>
 
 <p align="center">
-  <img src="assets/images/2.Settings_OpenRouter_Pexels_APIs.png" alt="OpenRouter API Settings"><br>
+  <img src="assets/screenshots-app/2.Settings_OpenRouter_Pexels_APIs.png" alt="OpenRouter API Settings"><br>
   <b>OpenRouter API Setup</b>
 </p>
 
 ### Presentation Creation
 
 <p align="center">
-  <img src="assets/images/3.Presentation_Settings.png" alt="Presentation Settings"><br>
+  <img src="assets/screenshots-app/3.Presentation_Settings.png" alt="Presentation Settings"><br>
   <b>Presentation Configuration</b>
 </p>
 
 <p align="center">
-  <img src="assets/images/13.Custom_Theme.png" alt="Custom Theme Settings"><br>
+  <img src="assets/screenshots-app/13.Custom_Theme.png" alt="Custom Theme Settings"><br>
   <b>Custom Theme Configuration</b>
 </p>
 
 <p align="center">
-  <img src="assets/images/4.Image_Layout.png" alt="Image Layout Options"><br>
+  <img src="assets/screenshots-app/4.Image_Layout.png" alt="Image Layout Options"><br>
   <b>Image Layout Selection</b>
 </p>
 
 <p align="center">
-  <img src="assets/images/14.Custom_Logo.png" alt="Custom Logo Settings"><br>
+  <img src="assets/screenshots-app/14.Custom_Logo.png" alt="Custom Logo Settings"><br>
   <b>Custom Logo Configuration</b>
 </p>
 
 <p align="center">
-  <img src="assets/images/5.PDF_Upload.png" alt="PDF Upload Feature"><br>
+  <img src="assets/screenshots-app/5.PDF_Upload.png" alt="PDF Upload Feature"><br>
   <b>PDF Context Upload</b>
 </p>
 
 <p align="center">
-  <img src="assets/images/6.Generation.png" alt="Generation Progress"><br>
+  <img src="assets/screenshots-app/6.Generation.png" alt="Generation Progress"><br>
   <b>Real-time Generation Progress</b>
 </p>
 
 ### Preview & Management
 
 <p align="center">
-  <img src="assets/images/7.Slide_Preview.png" alt="Slide Preview Grid"><br>
+  <img src="assets/screenshots-app/7.Slide_Preview.png" alt="Slide Preview Grid"><br>
   <b>Interactive Slide Preview</b>
 </p>
 
 ### Custom Slide Addition
 
 <p align="center">
-  <img src="assets/images/8.Add_new_slide.png" alt="Add New Slide Button"><br>
+  <img src="assets/screenshots-app/8.Add_new_slide.png" alt="Add New Slide Button"><br>
   <b>Add Slide Interface</b>
 </p>
 
 <p align="center">
-  <img src="assets/images/9.Single_Slide_generation.png" alt="Single Slide Generation"><br>
+  <img src="assets/screenshots-app/9.Single_Slide_generation.png" alt="Single Slide Generation"><br>
   <b>Custom Slide Creation</b>
 </p>
 
 <p align="center">
-  <img src="assets/images/10.Added_Slide_preview.png" alt="Added Slide Preview"><br>
+  <img src="assets/screenshots-app/10.Added_Slide_preview.png" alt="Added Slide Preview"><br>
   <b>Newly Added Slide</b>
 </p>
 
 ### Generated Presentation Example
 
 <p align="center">
-  <img src="assets/images/11.Presentation_Generated.png" alt="Final Presentation"><br>
+  <img src="assets/screenshots-app/11.Presentation_Generated.png" alt="Final Presentation"><br>
   <b>Complete Presentation</b>
 </p>
 
 <p align="center">
-  <img src="assets/images/12.Silde_preview.png" alt="Detailed Slide View"><br>
+  <img src="assets/screenshots-app/12.Silde_preview.png" alt="Detailed Slide View"><br>
   <b>Slide Details View</b>
 </p>
 
