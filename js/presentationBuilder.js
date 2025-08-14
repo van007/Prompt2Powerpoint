@@ -7,8 +7,10 @@ class PresentationBuilder {
         this.presentationData = null;
         this.selectedTheme = 'professional';
         this.originalPrompt = ''; // Store the original prompt
-        this.useRealImages = false; // Whether to use real images from Pexels
+        this.useRealImages = false; // Whether to use real images (local images)
         this.imageCache = new Map(); // Cache for fetched images
+        this.localImages = []; // List of available local images
+        this.localImageCache = new Map(); // Cache for loaded local images
         
         // Logo properties
         this.logoData = null; // Base64 encoded logo data
@@ -83,6 +85,246 @@ class PresentationBuilder {
         
         // Load saved custom theme if exists
         this.loadCustomTheme();
+    }
+
+    /**
+     * Scan local images from assets/images folder
+     * @returns {Promise<Array>} - Array of image file information
+     */
+    async scanLocalImages() {
+        // Always use the manifest approach since we can't list directories in browser
+        console.log('Scanning for local images using manifest.json...');
+        const images = await this.scanLocalImagesAlternative();
+        console.log('Scan complete. Images found:', images.length);
+        return images;
+    }
+
+    /**
+     * Alternative method to scan local images
+     * This tries to load a predefined list or checks for common image names
+     * @returns {Promise<Array>} - Array of image file information
+     */
+    async scanLocalImagesAlternative() {
+        // Since we can't dynamically list files in browser, we'll need to either:
+        // 1. Maintain a manifest file listing available images
+        // 2. Try to load images with common naming patterns
+        this.localImages = [];
+        
+        // Try to load a manifest file if it exists
+        try {
+            console.log('Attempting to fetch manifest from: assets/images/manifest.json');
+            const response = await fetch('assets/images/manifest.json');
+            
+            if (!response.ok) {
+                console.error('Failed to fetch manifest. Status:', response.status);
+                return this.localImages;
+            }
+            
+            const manifestText = await response.text();
+            console.log('Manifest response received, length:', manifestText.length);
+            
+            const manifest = JSON.parse(manifestText);
+            console.log('Manifest parsed successfully:', manifest);
+            
+            if (manifest && manifest.images) {
+                this.localImages = manifest.images.map(filename => ({
+                    filename: filename,
+                    path: `assets/images/${filename}`,
+                    keywords: this.extractKeywordsFromFilename(filename)
+                }));
+                console.log(`Successfully loaded ${this.localImages.length} local images from manifest`);
+                console.log('Image list:', this.localImages);
+                
+                // Update UI if images were loaded and toggle is on
+                if (this.localImages.length > 0 && typeof uiHandler !== 'undefined' && uiHandler.getUseRealImages()) {
+                    uiHandler.updateLocalImagesStatus();
+                }
+            } else {
+                console.error('Manifest does not contain images array:', manifest);
+            }
+        } catch (error) {
+            console.error('Error loading manifest:', error);
+            console.error('Full error details:', error.stack);
+        }
+        
+        return this.localImages;
+    }
+
+    /**
+     * Extract keywords from a filename
+     * @param {string} filename - The image filename
+     * @returns {Array<string>} - Array of keywords
+     */
+    extractKeywordsFromFilename(filename) {
+        // Remove file extension
+        const nameWithoutExt = filename.replace(/\.[^/.]+$/, '');
+        
+        // Split by common separators and clean up
+        const keywords = nameWithoutExt
+            .split(/[-_\s]+/)
+            .map(word => word.toLowerCase())
+            .filter(word => word.length > 2); // Filter out very short words
+        
+        return keywords;
+    }
+
+    /**
+     * Extract keywords from text content
+     * @param {string} text - Text to extract keywords from
+     * @returns {Array<string>} - Array of keywords
+     */
+    extractKeywords(text) {
+        if (!text) return [];
+        
+        // Common stop words to filter out
+        const stopWords = new Set([
+            'the', 'and', 'for', 'are', 'with', 'this', 'that', 'have', 'has',
+            'will', 'can', 'our', 'your', 'their', 'what', 'when', 'where', 'how',
+            'why', 'all', 'would', 'could', 'should', 'may', 'might', 'must',
+            'shall', 'will', 'from', 'into', 'through', 'during', 'before', 'after'
+        ]);
+        
+        // Extract words and filter
+        const keywords = text
+            .toLowerCase()
+            .replace(/[^\w\s]/g, ' ') // Remove punctuation
+            .split(/\s+/)
+            .filter(word => word.length > 2 && !stopWords.has(word));
+        
+        return [...new Set(keywords)]; // Remove duplicates
+    }
+
+    /**
+     * Calculate match score between keywords and filename keywords
+     * @param {Array<string>} contentKeywords - Keywords from slide content
+     * @param {Array<string>} filenameKeywords - Keywords from image filename
+     * @returns {number} - Match score (0-100)
+     */
+    calculateMatchScore(contentKeywords, filenameKeywords) {
+        if (!contentKeywords.length || !filenameKeywords.length) return 0;
+        
+        let matchCount = 0;
+        const contentSet = new Set(contentKeywords.map(k => k.toLowerCase()));
+        
+        for (const keyword of filenameKeywords) {
+            if (contentSet.has(keyword.toLowerCase())) {
+                matchCount++;
+            }
+            // Also check for partial matches (e.g., "team" matches "teamwork")
+            for (const contentKeyword of contentSet) {
+                if (contentKeyword.includes(keyword) || keyword.includes(contentKeyword)) {
+                    matchCount += 0.5;
+                    break;
+                }
+            }
+        }
+        
+        // Calculate score as percentage of matched keywords
+        const score = (matchCount / Math.max(filenameKeywords.length, contentKeywords.length)) * 100;
+        return Math.min(100, score);
+    }
+
+    /**
+     * Find the best matching local image for a slide
+     * @param {object} slideData - The slide data
+     * @returns {object|null} - Best matching image or null
+     */
+    findBestLocalImage(slideData) {
+        if (!this.localImages.length) return null;
+        
+        // Extract keywords from slide content
+        const titleKeywords = this.extractKeywords(slideData.title || '');
+        const contentKeywords = slideData.content ? 
+            this.extractKeywords(Array.isArray(slideData.content) ? 
+                slideData.content.join(' ') : slideData.content) : [];
+        const descriptionKeywords = this.extractKeywords(slideData.imageDescription || '');
+        
+        // Combine all keywords with weights
+        const allKeywords = [
+            ...titleKeywords,
+            ...titleKeywords, // Double weight for title
+            ...contentKeywords,
+            ...descriptionKeywords,
+            ...descriptionKeywords // Double weight for image description
+        ];
+        
+        // Score each image
+        let bestImage = null;
+        let bestScore = 0;
+        
+        for (const image of this.localImages) {
+            const score = this.calculateMatchScore(allKeywords, image.keywords);
+            if (score > bestScore) {
+                bestScore = score;
+                bestImage = image;
+            }
+        }
+        
+        // If no good match found (score < 20), return random image
+        if (bestScore < 20 && this.localImages.length > 0) {
+            const randomIndex = Math.floor(Math.random() * this.localImages.length);
+            bestImage = this.localImages[randomIndex];
+            console.log(`No good match found for slide "${slideData.title}", using random image`);
+        } else if (bestImage) {
+            console.log(`Found image "${bestImage.filename}" with score ${bestScore} for slide "${slideData.title}"`);
+        }
+        
+        return bestImage;
+    }
+
+    /**
+     * Load a local image and convert to base64
+     * @param {string} imagePath - Path to the image
+     * @returns {Promise<string>} - Base64 encoded image data
+     */
+    async loadLocalImage(imagePath) {
+        // Check cache first
+        if (this.localImageCache.has(imagePath)) {
+            return this.localImageCache.get(imagePath);
+        }
+        
+        try {
+            const response = await fetch(imagePath);
+            const blob = await response.blob();
+            
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    const base64Data = reader.result;
+                    // Cache the result
+                    this.localImageCache.set(imagePath, base64Data);
+                    resolve(base64Data);
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            });
+        } catch (error) {
+            console.error(`Failed to load local image ${imagePath}:`, error);
+            return null;
+        }
+    }
+
+    /**
+     * Get local image for slide or fallback to placeholder
+     * @param {object} slideData - The slide data
+     * @returns {Promise<string>} - Image data (base64) or placeholder
+     */
+    async getLocalImageForSlide(slideData) {
+        if (!this.useRealImages || !this.localImages.length) {
+            // Return placeholder if not using real images or no images available
+            return this.generatePlaceholderPNG();
+        }
+        
+        const bestImage = this.findBestLocalImage(slideData);
+        if (bestImage) {
+            const imageData = await this.loadLocalImage(bestImage.path);
+            if (imageData) {
+                return imageData;
+            }
+        }
+        
+        // Fallback to placeholder if loading fails
+        return this.generatePlaceholderPNG();
     }
 
     /**
@@ -543,11 +785,26 @@ class PresentationBuilder {
             h: '35%'
         };
         
-        // For now, always use placeholder (real images to be implemented later)
-        this.addImagePlaceholder(slide, {
-            ...imageOptions,
-            altText: slideData.imageDescription || 'Right Click -> Change Picture -> Choose Option to Replace'
-        });
+        // Get local image or placeholder
+        const imageData = await this.getLocalImageForSlide(slideData);
+        
+        if (this.useRealImages && imageData !== this.generatePlaceholderPNG()) {
+            // Add local image
+            slide.addImage({
+                data: imageData,
+                x: imageOptions.x,
+                y: imageOptions.y,
+                w: imageOptions.w,
+                h: imageOptions.h,
+                altText: slideData.imageDescription || 'Image from local assets'
+            });
+        } else {
+            // Use placeholder
+            this.addImagePlaceholder(slide, {
+                ...imageOptions,
+                altText: slideData.imageDescription || 'Right Click -> Change Picture -> Choose Option to Replace'
+            });
+        }
         
         // Add content below image
         if (slideData.content && Array.isArray(slideData.content)) {
@@ -577,11 +834,26 @@ class PresentationBuilder {
             h: '65%'
         };
         
-        // For now, always use placeholder (real images to be implemented later)
-        this.addImagePlaceholder(slide, {
-            ...imageOptions,
-            altText: slideData.imageDescription || 'Right Click -> Change Picture -> Choose Option to Replace'
-        });
+        // Get local image or placeholder
+        const imageData = await this.getLocalImageForSlide(slideData);
+        
+        if (this.useRealImages && imageData !== this.generatePlaceholderPNG()) {
+            // Add local image
+            slide.addImage({
+                data: imageData,
+                x: imageOptions.x,
+                y: imageOptions.y,
+                w: imageOptions.w,
+                h: imageOptions.h,
+                altText: slideData.imageDescription || 'Image from local assets'
+            });
+        } else {
+            // Use placeholder
+            this.addImagePlaceholder(slide, {
+                ...imageOptions,
+                altText: slideData.imageDescription || 'Right Click -> Change Picture -> Choose Option to Replace'
+            });
+        }
         
         // Add content on right
         if (slideData.content && Array.isArray(slideData.content)) {
@@ -628,11 +900,26 @@ class PresentationBuilder {
             h: '35%'
         };
         
-        // For now, always use placeholder (real images to be implemented later)
-        this.addImagePlaceholder(slide, {
-            ...imageOptions,
-            altText: slideData.imageDescription || 'Right Click -> Change Picture -> Choose Option to Replace'
-        });
+        // Get local image or placeholder
+        const imageData = await this.getLocalImageForSlide(slideData);
+        
+        if (this.useRealImages && imageData !== this.generatePlaceholderPNG()) {
+            // Add local image
+            slide.addImage({
+                data: imageData,
+                x: imageOptions.x,
+                y: imageOptions.y,
+                w: imageOptions.w,
+                h: imageOptions.h,
+                altText: slideData.imageDescription || 'Image from local assets'
+            });
+        } else {
+            // Use placeholder
+            this.addImagePlaceholder(slide, {
+                ...imageOptions,
+                altText: slideData.imageDescription || 'Right Click -> Change Picture -> Choose Option to Replace'
+            });
+        }
     }
     
     /**
@@ -646,11 +933,26 @@ class PresentationBuilder {
             h: '100%'
         };
         
-        // For now, always use placeholder (real images to be implemented later)
-        this.addImagePlaceholder(slide, {
-            ...imageOptions,
-            altText: slideData.imageDescription || 'Right Click -> Change Picture -> Choose Option to Replace'
-        });
+        // Get local image or placeholder
+        const imageData = await this.getLocalImageForSlide(slideData);
+        
+        if (this.useRealImages && imageData !== this.generatePlaceholderPNG()) {
+            // Add local image as background
+            slide.addImage({
+                data: imageData,
+                x: imageOptions.x,
+                y: imageOptions.y,
+                w: imageOptions.w,
+                h: imageOptions.h,
+                altText: slideData.imageDescription || 'Background image from local assets'
+            });
+        } else {
+            // Use placeholder
+            this.addImagePlaceholder(slide, {
+                ...imageOptions,
+                altText: slideData.imageDescription || 'Right Click -> Change Picture -> Choose Option to Replace'
+            });
+        }
         
         // Add semi-transparent background for title
         slide.addShape(this.pptx.ShapeType.rect, {
@@ -991,7 +1293,7 @@ class PresentationBuilder {
     }
     
     /**
-     * Set whether to use real images from Pexels
+     * Set whether to use real images from local assets
      * @param {boolean} useReal - Whether to use real images
      */
     setUseRealImages(useReal) {

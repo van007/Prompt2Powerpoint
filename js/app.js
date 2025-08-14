@@ -25,6 +25,32 @@ class App {
         
         // Initialize PDF.js
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        
+        // Scan for local images
+        await this.scanLocalImages();
+    }
+    
+    /**
+     * Scan for local images in assets/images folder
+     */
+    async scanLocalImages() {
+        try {
+            const images = await presentationBuilder.scanLocalImages();
+            console.log(`Found ${images.length} local images`);
+            
+            // Always update UI to show the status (even if toggle is off)
+            // This helps users know images are available
+            if (uiHandler && uiHandler.updateLocalImagesStatus) {
+                // Add a small delay to ensure UI is ready
+                setTimeout(() => {
+                    if (uiHandler.getUseRealImages()) {
+                        uiHandler.updateLocalImagesStatus();
+                    }
+                }, 100);
+            }
+        } catch (error) {
+            console.error('Error scanning local images:', error);
+        }
     }
 
     /**

@@ -121,3 +121,14 @@ local/
 # Presentation outputs (optional - uncomment if needed)
 *.pptx
 presentations/
+
+# Local images for presentations
+assets/images/*.jpg
+assets/images/*.jpeg
+assets/images/*.png
+assets/images/*.gif
+assets/images/*.webp
+assets/images/*.svg
+# Keep the README and manifest
+!assets/images/README-Images.md
+!assets/images/manifest.json

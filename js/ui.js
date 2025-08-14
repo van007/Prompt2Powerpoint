@@ -60,6 +60,7 @@ class UiHandler {
             imageTypeDescription: document.getElementById('image-type-description'),
             placeholderDesc: document.querySelector('.placeholder-desc'),
             realImagesDesc: document.querySelector('.real-images-desc'),
+            localImagesStatus: document.getElementById('local-images-status'),
             
             // Font selects
             headingFontSelect: document.getElementById('heading-font-select'),
@@ -1021,8 +1022,31 @@ class UiHandler {
             this.elements.realImagesDesc.style.display = useRealImages ? 'inline' : 'none';
         }
         
-        // Note: Real image functionality will be implemented later
-        // For now, both options will use placeholders
+        // Update local images status if using real images
+        if (useRealImages && this.elements.localImagesStatus) {
+            this.updateLocalImagesStatus();
+        } else if (this.elements.localImagesStatus) {
+            this.elements.localImagesStatus.style.display = 'none';
+        }
+    }
+    
+    /**
+     * Update the local images status display
+     */
+    updateLocalImagesStatus() {
+        if (!this.elements.localImagesStatus) return;
+        
+        const imageCount = presentationBuilder.localImages ? presentationBuilder.localImages.length : 0;
+        
+        if (imageCount > 0) {
+            this.elements.localImagesStatus.innerHTML = `<i class="fas fa-check-circle"></i> ${imageCount} images available`;
+            this.elements.localImagesStatus.style.color = '#27ae60';
+        } else {
+            this.elements.localImagesStatus.innerHTML = `<i class="fas fa-exclamation-triangle"></i> No images found in assets/images/`;
+            this.elements.localImagesStatus.style.color = '#e74c3c';
+        }
+        
+        this.elements.localImagesStatus.style.display = 'block';
     }
     
     /**
