@@ -99,7 +99,7 @@ For maximum privacy, use:
 
 <p align="center">
   <img src="assets/images/4.Image_Layout.png" alt="Image Layout Options"><br>
-  <b>Image Layout Selection</b>
+  <b>Image Source Selection with Layout</b>
 </p>
 
 <p align="center">
