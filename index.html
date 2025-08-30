@@ -162,18 +162,53 @@
         <section class="image-layouts-section">
             <h3>Image Layout</h3>
             
-            <!-- Image Type Toggle -->
-            <div class="image-type-toggle">
-                <label class="toggle-switch">
-                    <input type="checkbox" id="use-real-images" class="toggle-input">
-                    <span class="toggle-slider"></span>
-                    <span class="toggle-label-left">Use Placeholders</span>
-                    <span class="toggle-label-right">Use Real Images</span>
-                </label>
-                <p class="toggle-description" id="image-type-description">
-                    <span class="placeholder-desc">Image placeholders will be added that you can replace later in PowerPoint</span>
-                    <span class="real-images-desc" style="display: none;">Real images will be fetched from Pexels based on slide content</span>
-                </p>
+            <!-- Image Source Selection -->
+            <div class="image-source-selection">
+                <h4>Image Source</h4>
+                <div class="image-source-options">
+                    <label class="image-source-option">
+                        <input type="radio" name="image-source" id="source-placeholder" value="placeholder" checked>
+                        <div class="source-option-content">
+                            <span class="source-option-title">Image Placeholders</span>
+                            <span class="source-option-desc">Add placeholders that you can replace later in PowerPoint</span>
+                        </div>
+                    </label>
+                    <label class="image-source-option">
+                        <input type="radio" name="image-source" id="source-pexels" value="pexels">
+                        <div class="source-option-content">
+                            <span class="source-option-title">Pexels Stock Images</span>
+                            <span class="source-option-desc">Fetch professional stock images from Pexels API</span>
+                        </div>
+                    </label>
+                    <label class="image-source-option">
+                        <input type="radio" name="image-source" id="source-local" value="local">
+                        <div class="source-option-content">
+                            <span class="source-option-title">Local Images</span>
+                            <span class="source-option-desc">Use images from a folder on your computer</span>
+                        </div>
+                    </label>
+                </div>
+                
+                <!-- Local Folder Selection (hidden by default) -->
+                <div class="local-folder-selection" id="local-folder-selection" style="display: none;">
+                    <div class="folder-selection-area">
+                        <button class="select-folder-btn" id="select-folder-btn">
+                            <i class="fas fa-folder-open"></i>
+                            Select Image Folder
+                        </button>
+                        <input type="file" id="folder-input" webkitdirectory directory multiple hidden>
+                    </div>
+                    <div class="folder-info" id="folder-info" style="display: none;">
+                        <div class="folder-details">
+                            <i class="fas fa-folder"></i>
+                            <span id="folder-name">No folder selected</span>
+                            <span class="image-count" id="folder-image-count">0 images</span>
+                        </div>
+                        <button class="clear-folder-btn" id="clear-folder-btn" title="Clear selection">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
             
             <p class="section-description">Select the image layout for all slides in your presentation</p>
@@ -435,6 +470,7 @@
     <script src="js/api.js"></script>
     <script src="js/fileHandler.js"></script>
     <script src="js/pexelsClient.js"></script>
+    <script src="js/localImageHandler.js"></script>
     <script src="js/presentationBuilder.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/app.js"></script>
