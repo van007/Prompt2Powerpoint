@@ -791,42 +791,435 @@ footer {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    /* Header adjustments */
+    header {
+        padding: 0.75rem 1rem;
+    }
+    
+    .logo h1 {
+        font-size: 1.2rem;
+    }
+    
+    .logo-icon {
+        width: 3rem;
+        height: 3rem;
+    }
+    
+    /* Hero section */
     .hero {
-        height: 350px;
+        height: auto;
+        min-height: 300px;
+        padding: 2rem 1rem;
+    }
+    
+    .hero-content {
+        padding: 1rem;
     }
     
     h2 {
-        font-size: 2rem;
+        font-size: 1.75rem;
+        margin-bottom: 1rem;
     }
     
+    .hero p {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    /* Search container - stack vertically */
+    .search-container {
+        flex-direction: column;
+        max-width: 100%;
+        margin: 0;
+    }
+    
+    .search-input {
+        width: 100%;
+        border-radius: 30px 30px 0 0;
+    }
+    
+    .search-input input {
+        padding: 1rem 0;
+        font-size: 0.95rem;
+    }
+    
+    .generate-btn {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1rem;
+        border-radius: 0 0 30px 30px;
+        min-height: 48px; /* Better touch target */
+    }
+    
+    /* Main content */
+    main {
+        padding: 0.5rem;
+    }
+    
+    /* Sections */
+    section {
+        margin-bottom: 1.5rem;
+    }
+    
+    .customization,
+    .upload-section,
+    .model-section,
+    .image-layouts-section,
+    .logo-settings-section {
+        padding: 0.5rem;
+    }
+    
+    h3 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+    
+    /* Options row */
     .options-row {
         flex-direction: column;
         gap: 1rem;
     }
+    
+    .option-group {
+        min-width: 100%;
+    }
+    
+    .option-group select {
+        font-size: 1rem;
+        padding: 0.875rem;
+        min-height: 48px;
+    }
+    
+    /* Theme preview */
+    .theme-preview {
+        padding: 1rem;
+        margin-top: 1rem;
+    }
+    
+    /* Upload section */
+    .upload-container {
+        padding: 1.5rem 1rem;
+    }
+    
+    .upload-container p {
+        font-size: 0.9rem;
+    }
+    
+    /* File list */
+    .file-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .file-item .remove-file {
+        align-self: flex-end;
+    }
+    
+    /* Model selection */
+    #model-select {
+        font-size: 1rem;
+        padding: 0.875rem;
+        min-height: 48px;
+    }
+    
+    /* Toggle switch */
+    .toggle-switch {
+        width: 180px;
+    }
+    
+    .toggle-input:checked + .toggle-slider:before {
+        transform: translateX(140px);
+    }
+    
+    /* Modals */
+    .modal-content {
+        width: 95%;
+        max-width: none;
+        margin: 1rem;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    
+    .modal-header h3 {
+        font-size: 1.2rem;
+    }
+    
+    .close-modal {
+        font-size: 1.8rem;
+        padding: 0.5rem;
+        min-width: 44px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Form elements in modals */
+    .url-form input,
+    .add-slide-form input,
+    .add-slide-form textarea {
+        font-size: 1rem;
+        padding: 0.875rem;
+    }
+    
+    .form-buttons {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .form-buttons button {
+        width: 100%;
+        padding: 0.875rem;
+        font-size: 1rem;
+    }
+    
+    /* Provider options */
+    .provider-options {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    /* Theme preview responsive adjustments */
+    .theme-details {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .font-label {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+    
+    .font-sample {
+        display: block;
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .font-select {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 0.95rem;
+    }
+    
+    .color-grid {
+        justify-content: space-around;
+    }
+    
+    .color-item {
+        flex: 0 0 calc(33.333% - 1rem);
+        min-width: 80px;
+    }
+    
+    .color-swatch {
+        width: 50px;
+        height: 50px;
+    }
+    
+    /* Result section */
+    .presentation-preview {
+        gap: 0.75rem;
+    }
+    
+    .slide-preview {
+        width: 160px;
+        height: 120px;
+    }
+    
+    /* Browse button */
+    .browse-btn {
+        width: 100%;
+        padding: 0.875rem;
+        font-size: 0.95rem;
+    }
 }
 
+/* Smaller mobile devices (390px width) */
 @media (max-width: 480px) {
+    /* Header */
+    header {
+        padding: 0.5rem;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .logo {
+        justify-content: center;
+    }
+    
+    /* Hero section */
     .hero {
-        height: 300px;
+        min-height: 250px;
+        padding: 1.5rem 0.75rem;
     }
     
     h2 {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
+        line-height: 1.2;
     }
     
-    .search-container {
-        flex-direction: column;
-        border-radius: var(--border-radius);
+    .hero p {
+        font-size: 0.9rem;
+        padding: 0 0.5rem;
     }
     
-    .generate-btn {
-        border-radius: 0;
+    /* Image layouts */
+    .image-layouts-container {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+    
+    .layout-preview {
+        height: 80px;
+    }
+    
+    /* Image type toggle */
+    .image-type-toggle {
         padding: 1rem;
+    }
+    
+    .toggle-switch {
+        width: 160px;
+        height: 36px;
+    }
+    
+    .toggle-slider:before {
+        height: 28px;
+        width: 28px;
+    }
+    
+    .toggle-input:checked + .toggle-slider:before {
+        transform: translateX(120px);
+    }
+    
+    .toggle-label-left,
+    .toggle-label-right {
+        font-size: 0.7rem;
+    }
+    
+    /* Logo upload section */
+    .logo-upload-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .logo-upload-area {
+        width: 100%;
+        height: 180px;
+    }
+    
+    .logo-options {
+        width: 100%;
+        gap: 1rem;
+    }
+    
+    .logo-option-group {
+        padding: 1rem;
+    }
+    
+    .logo-position-options,
+    .logo-size-options {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    /* Slide previews */
+    .presentation-preview {
+        justify-content: center;
+    }
+    
+    .slide-preview {
+        width: 140px;
+        height: 100px;
+    }
+    
+    .slide-title {
+        font-size: 0.85rem;
+    }
+    
+    .slide-content-preview {
+        font-size: 0.75rem;
+    }
+    
+    /* Plus icons */
+    .plus-icon {
+        width: 30px;
+        height: 30px;
+        font-size: 0.9rem;
+        margin: 0 3px;
+    }
+    
+    .slide-row {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    /* Download button */
+    .download-btn {
+        width: 100%;
+        padding: 1rem;
+    }
+    
+    /* Footer */
+    footer {
+        padding: 1rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* Very small devices (around 360px width) */
+@media (max-width: 390px) {
+    /* Even more compact for very small phones */
+    h2 {
+        font-size: 1.4rem;
+    }
+    
+    .hero {
+        min-height: 220px;
+    }
+    
+    .toggle-switch {
+        width: 150px;
+    }
+    
+    .toggle-input:checked + .toggle-slider:before {
+        transform: translateX(110px);
     }
     
     .slide-preview {
         width: 120px;
-        height: 80px;
+        height: 90px;
+    }
+    
+    /* Make all buttons full width for better accessibility */
+    button {
+        min-height: 44px;
+    }
+}
+
+/* Landscape orientation for mobile */
+@media (max-height: 600px) and (orientation: landscape) {
+    .hero {
+        min-height: 200px;
+        padding: 1rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    .hero p {
+        display: none; /* Hide description to save space */
+    }
+    
+    section {
+        margin-bottom: 1rem;
+    }
+    
+    .modal-content {
+        max-height: 85vh;
+        margin: 0.5rem;
     }
 }
 
