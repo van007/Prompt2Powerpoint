@@ -55,7 +55,19 @@ class UiHandler {
             layoutTextFocus: document.getElementById('layout-text-focus'),
             layoutBackground: document.getElementById('layout-background'),
             
-            // Real images toggle
+            // Image source elements
+            sourcePlaceholder: document.getElementById('source-placeholder'),
+            sourcePexels: document.getElementById('source-pexels'),
+            sourceLocal: document.getElementById('source-local'),
+            localFolderSelection: document.getElementById('local-folder-selection'),
+            selectFolderBtn: document.getElementById('select-folder-btn'),
+            folderInput: document.getElementById('folder-input'),
+            folderInfo: document.getElementById('folder-info'),
+            folderName: document.getElementById('folder-name'),
+            folderImageCount: document.getElementById('folder-image-count'),
+            clearFolderBtn: document.getElementById('clear-folder-btn'),
+            
+            // Legacy: Real images toggle (for backwards compatibility)
             useRealImagesToggle: document.getElementById('use-real-images'),
             imageTypeDescription: document.getElementById('image-type-description'),
             placeholderDesc: document.querySelector('.placeholder-desc'),
@@ -234,15 +246,18 @@ class UiHandler {
         // Add slide modal handlers
         this.setupAddSlideModalHandlers();
         
-        // Real images toggle
+        // Image source selection handlers
+        this.setupImageSourceHandlers();
+        
+        // Legacy: Real images toggle (for backwards compatibility)
         if (this.elements.useRealImagesToggle) {
             this.elements.useRealImagesToggle.addEventListener('change', () => {
                 this.onImageTypeToggled();
             });
         }
         
-        // Initialize real images toggle state
-        this.onImageTypeToggled();
+        // Initialize image source state
+        this.initializeImageSource();
         
         // Custom theme event listeners
         this.setupCustomThemeListeners();
@@ -770,7 +785,8 @@ class UiHandler {
             modelId: this.elements.modelSelect.value,
             theme: this.elements.themeSelect.value,
             imageLayout: this.getSelectedImageLayout(),
-            useRealImages: this.getUseRealImages(),
+            useRealImages: this.getUseRealImages(), // Backwards compatibility
+            imageSource: this.getImageSource(), // New property
             logoSettings: this.getLogoSettings()
         };
     }
@@ -811,6 +827,146 @@ class UiHandler {
             
             document.dispatchEvent(event);
         }
+    }
+    
+    /**
+     * Setup image source selection handlers
+     */
+    setupImageSourceHandlers() {
+        // Image source radio buttons
+        const sourceRadios = document.querySelectorAll('input[name="image-source"]');
+        sourceRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                this.onImageSourceChanged();
+            });
+        });
+        
+        // Folder selection button
+        if (this.elements.selectFolderBtn) {
+            this.elements.selectFolderBtn.addEventListener('click', () => {
+                this.elements.folderInput.click();
+            });
+        }
+        
+        // Folder input change
+        if (this.elements.folderInput) {
+            this.elements.folderInput.addEventListener('change', async (e) => {
+                await this.handleFolderSelection(e.target.files);
+            });
+        }
+        
+        // Clear folder button
+        if (this.elements.clearFolderBtn) {
+            this.elements.clearFolderBtn.addEventListener('click', () => {
+                this.clearFolderSelection();
+            });
+        }
+    }
+    
+    /**
+     * Initialize image source state
+     */
+    initializeImageSource() {
+        // Check saved image source preference
+        const savedSource = localStorage.getItem('image_source');
+        if (savedSource) {
+            const sourceRadio = document.querySelector(`input[name="image-source"][value="${savedSource}"]`);
+            if (sourceRadio) {
+                sourceRadio.checked = true;
+            }
+        }
+        
+        // Trigger change handler to update UI
+        this.onImageSourceChanged();
+    }
+    
+    /**
+     * Handle image source change
+     */
+    onImageSourceChanged() {
+        const selectedSource = this.getImageSource();
+        
+        // Save preference
+        localStorage.setItem('image_source', selectedSource);
+        
+        // Show/hide local folder selection
+        if (this.elements.localFolderSelection) {
+            this.elements.localFolderSelection.style.display = 
+                selectedSource === 'local' ? 'block' : 'none';
+        }
+        
+        // Check API key requirements
+        if (selectedSource === 'pexels' && !pexelsClient.hasApiKey()) {
+            // Show warning but don't force change
+            this.showWarning('Pexels API key not configured. Please add it in settings to use stock images.');
+        }
+    }
+    
+    /**
+     * Handle folder selection
+     * @param {FileList} files - Selected files from folder
+     */
+    async handleFolderSelection(files) {
+        if (!files || files.length === 0) return;
+        
+        this.showLoading('Processing folder...');
+        
+        try {
+            const result = await localImageHandler.processFolder(files);
+            
+            if (result.success) {
+                // Update UI with folder info
+                if (this.elements.folderName) {
+                    this.elements.folderName.textContent = result.folderPath || 'Selected folder';
+                }
+                if (this.elements.folderImageCount) {
+                    this.elements.folderImageCount.textContent = `${result.imageCount} images`;
+                }
+                if (this.elements.folderInfo) {
+                    this.elements.folderInfo.style.display = 'flex';
+                }
+                
+                this.hideLoading();
+                this.showSuccess(`Found ${result.imageCount} images in folder`);
+            } else {
+                this.hideLoading();
+                this.showError(result.message || 'Failed to process folder');
+            }
+        } catch (error) {
+            this.hideLoading();
+            this.showError('Error processing folder: ' + error.message);
+        }
+        
+        // Reset file input
+        this.elements.folderInput.value = '';
+    }
+    
+    /**
+     * Clear folder selection
+     */
+    clearFolderSelection() {
+        localImageHandler.clear();
+        
+        if (this.elements.folderInfo) {
+            this.elements.folderInfo.style.display = 'none';
+        }
+        if (this.elements.folderName) {
+            this.elements.folderName.textContent = 'No folder selected';
+        }
+        if (this.elements.folderImageCount) {
+            this.elements.folderImageCount.textContent = '0 images';
+        }
+        
+        this.showInfo('Folder selection cleared');
+    }
+    
+    /**
+     * Get the selected image source
+     * @returns {string} - 'placeholder', 'pexels', or 'local'
+     */
+    getImageSource() {
+        const checkedRadio = document.querySelector('input[name="image-source"]:checked');
+        return checkedRadio ? checkedRadio.value : 'placeholder';
     }
     
     /**
@@ -1025,36 +1181,46 @@ class UiHandler {
     }
     
     /**
-     * Handle image type toggle change
+     * Legacy: Handle image type toggle change (backwards compatibility)
      */
     onImageTypeToggled() {
+        // This is a legacy method for backwards compatibility
+        // The new implementation uses image source selection
         const useRealImages = this.elements.useRealImagesToggle ? this.elements.useRealImagesToggle.checked : false;
         
-        // Update description visibility
-        if (this.elements.placeholderDesc && this.elements.realImagesDesc) {
-            this.elements.placeholderDesc.style.display = useRealImages ? 'none' : 'inline';
-            this.elements.realImagesDesc.style.display = useRealImages ? 'inline' : 'none';
-        }
-        
-        // Check if Pexels API key is configured when real images are selected
-        if (useRealImages && !pexelsClient.hasApiKey()) {
-            // Load saved key
-            const savedKey = pexelsClient.loadSavedApiKey();
-            if (!savedKey) {
+        // Map to new image source system
+        if (useRealImages) {
+            // Check if Pexels API key is configured
+            if (!pexelsClient.hasApiKey()) {
                 this.showError('Please configure your Pexels API key in settings to use real images', 'API Key Required');
                 // Reset toggle
-                this.elements.useRealImagesToggle.checked = false;
-                this.onImageTypeToggled(); // Recursive call to update UI
+                if (this.elements.useRealImagesToggle) {
+                    this.elements.useRealImagesToggle.checked = false;
+                }
+            } else {
+                // Set to pexels source
+                if (this.elements.sourcePexels) {
+                    this.elements.sourcePexels.checked = true;
+                    this.onImageSourceChanged();
+                }
+            }
+        } else {
+            // Set to placeholder source
+            if (this.elements.sourcePlaceholder) {
+                this.elements.sourcePlaceholder.checked = true;
+                this.onImageSourceChanged();
             }
         }
     }
     
     /**
-     * Get whether to use real images
+     * Legacy: Get whether to use real images (backwards compatibility)
      * @returns {boolean}
      */
     getUseRealImages() {
-        return this.elements.useRealImagesToggle ? this.elements.useRealImagesToggle.checked : false;
+        // Map from new image source to boolean for backwards compatibility
+        const source = this.getImageSource();
+        return source === 'pexels';
     }
     
     /**
@@ -1382,6 +1548,33 @@ class UiHandler {
             width: this.logoWidth,
             height: this.logoHeight
         };
+    }
+    
+    /**
+     * Show warning message
+     * @param {string} message - Warning message
+     */
+    showWarning(message) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Warning',
+            text: message,
+            confirmButtonText: 'OK'
+        });
+    }
+    
+    /**
+     * Show info message
+     * @param {string} message - Info message
+     */
+    showInfo(message) {
+        Swal.fire({
+            icon: 'info',
+            title: 'Info',
+            text: message,
+            timer: 2000,
+            showConfirmButton: false
+        });
     }
 }
 

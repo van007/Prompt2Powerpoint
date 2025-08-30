@@ -56,6 +56,7 @@ A powerful AI-driven web application that generates professional PowerPoint pres
 1. **No Images**: Clean, text-only presentations for maximum focus
 2. **Image Placeholders**: Transparent placeholders that can be manually replaced in PowerPoint
 3. **Real Images** (Experimental): AI-selected stock photos from Pexels based on slide content
+4. **Local Images** (New): Use images from your computer folder, automatically matched to slides
 
 ### Image Layouts (when images are enabled)
 - **Full Width**: Image at top, text content below
@@ -170,7 +171,15 @@ For maximum privacy, use:
 ### Option 3: Real Images with Pexels (Optional)
 1. Get a free API key from <a href="https://www.pexels.com/api/" target="_blank">Pexels</a>
 2. Add the key in Settings
-3. Toggle "Use Real Images" in the image options
+3. Select "Pexels Stock Images" in the image options
+
+### Option 4: Local Images from Your Computer (New)
+1. Select "Local Images" in the image source options
+2. Click "Select Image Folder" and choose a folder containing images
+3. Images are matched to slides by:
+   - Exact title match (e.g., "Introduction.jpg" for "Introduction" slide)
+   - Slide number (e.g., "slide1.jpg", "slide_1.png")
+   - Keywords from slide titles
 
 ## 📝 Usage Guide
 
@@ -343,6 +352,13 @@ Logo: Company logo, Top Right position, Medium size
 
 ## 🌟 Latest Updates
 
+### August 30, 2025
+- **Local Images Support**: Use images from your computer folder for presentations
+  - Smart image matching based on filenames and slide titles
+  - Support for JPG, PNG, GIF, WebP, BMP formats
+  - Automatic base64 embedding in presentations
+
+### Previous Updates
 - **Custom Logo Feature**: Upload and position company logos on all slides
 - **Custom Theme Feature**: Create personalized themes with interactive controls
 - **Theme System**: 6 themes including fully customizable option

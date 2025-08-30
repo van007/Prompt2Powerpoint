@@ -121,6 +121,12 @@ class App {
      */
     async generatePresentation(inputValues) {
         try {
+            // Validate local image selection if needed
+            if (inputValues.imageSource === 'local' && !localImageHandler.hasImages()) {
+                uiHandler.showError('Please select a folder containing images before generating the presentation.');
+                return;
+            }
+            
             // Disable generate button
             uiHandler.disableGenerateButton();
             
@@ -155,8 +161,22 @@ class App {
                 presentationBuilder.setSelectedImageLayout(inputValues.imageLayout);
             }
             
-            // Set whether to use real images
-            presentationBuilder.setUseRealImages(inputValues.useRealImages);
+            // Set image source (new property with backwards compatibility)
+            if (inputValues.imageSource) {
+                console.log('Setting image source:', inputValues.imageSource);
+                presentationBuilder.setImageSource(inputValues.imageSource);
+                
+                // If using local images, match them to slides
+                if (inputValues.imageSource === 'local' && localImageHandler.hasImages()) {
+                    console.log('Processing local images for slides...');
+                    const matchedImages = localImageHandler.getMatchedImagesForSlides(presentationData.slides);
+                    console.log('Matched images:', matchedImages.size, 'images matched to slides');
+                    presentationBuilder.setLocalImages(matchedImages);
+                }
+            } else {
+                // Backwards compatibility: use the boolean flag
+                presentationBuilder.setUseRealImages(inputValues.useRealImages);
+            }
             
             // Set logo if configured
             if (inputValues.logoSettings && inputValues.logoSettings.data) {

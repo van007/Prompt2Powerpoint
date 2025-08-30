@@ -7,8 +7,10 @@ class PresentationBuilder {
         this.presentationData = null;
         this.selectedTheme = 'professional';
         this.originalPrompt = ''; // Store the original prompt
-        this.useRealImages = false; // Whether to use real images from Pexels
+        this.useRealImages = false; // Whether to use real images from Pexels (backwards compatibility)
+        this.imageSource = 'placeholder'; // 'placeholder', 'pexels', or 'local'
         this.imageCache = new Map(); // Cache for fetched images
+        this.localImagesMap = new Map(); // Map of slide index to local image data
         
         // Logo properties
         this.logoData = null; // Base64 encoded logo data
@@ -543,8 +545,21 @@ class PresentationBuilder {
             h: '35%'
         };
         
-        // Try to use real image if enabled
-        if (this.useRealImages) {
+        // Handle different image sources
+        if (this.imageSource === 'local') {
+            // Get slide index from presentation data
+            const slideIndex = this.presentationData.slides.indexOf(slideData);
+            const localImage = this.localImagesMap.get(slideIndex);
+            if (localImage) {
+                await this.addLocalImage(slide, localImage, imageOptions);
+            } else {
+                // Fallback to placeholder if no local image matched
+                this.addImagePlaceholder(slide, {
+                    ...imageOptions,
+                    altText: slideData.imageDescription || 'No matching local image found'
+                });
+            }
+        } else if (this.imageSource === 'pexels' || (this.imageSource === 'placeholder' && this.useRealImages)) {
             const imageData = await this.fetchImageForSlide(slideData, 'full-width');
             if (imageData) {
                 await this.addRealImage(slide, imageData, imageOptions);
@@ -591,8 +606,19 @@ class PresentationBuilder {
             h: '65%'
         };
         
-        // Try to use real image if enabled
-        if (this.useRealImages) {
+        // Handle different image sources
+        if (this.imageSource === 'local') {
+            const slideIndex = this.presentationData.slides.indexOf(slideData);
+            const localImage = this.localImagesMap.get(slideIndex);
+            if (localImage) {
+                await this.addLocalImage(slide, localImage, imageOptions);
+            } else {
+                this.addImagePlaceholder(slide, {
+                    ...imageOptions,
+                    altText: slideData.imageDescription || 'No matching local image found'
+                });
+            }
+        } else if (this.imageSource === 'pexels' || (this.imageSource === 'placeholder' && this.useRealImages)) {
             const imageData = await this.fetchImageForSlide(slideData, 'side-by-side');
             if (imageData) {
                 await this.addRealImage(slide, imageData, imageOptions);
@@ -654,7 +680,19 @@ class PresentationBuilder {
             h: '35%'
         };
         
-        if (this.useRealImages) {
+        // Handle different image sources
+        if (this.imageSource === 'local') {
+            const slideIndex = this.presentationData.slides.indexOf(slideData);
+            const localImage = this.localImagesMap.get(slideIndex);
+            if (localImage) {
+                await this.addLocalImage(slide, localImage, imageOptions);
+            } else {
+                this.addImagePlaceholder(slide, {
+                    ...imageOptions,
+                    altText: slideData.imageDescription || 'No matching local image found'
+                });
+            }
+        } else if (this.imageSource === 'pexels' || (this.imageSource === 'placeholder' && this.useRealImages)) {
             const imageData = await this.fetchImageForSlide(slideData, 'text-focus');
             if (imageData) {
                 await this.addRealImage(slide, imageData, imageOptions);
@@ -683,8 +721,8 @@ class PresentationBuilder {
             h: '100%'
         };
         
-        // Try to use real image if enabled
-        if (this.useRealImages) {
+        // Try to use selected image source
+        if (this.imageSource === 'pexels' || (this.imageSource === 'placeholder' && this.useRealImages)) {
             const imageData = await this.fetchImageForSlide(slideData, 'background');
             if (imageData) {
                 await this.addRealImage(slide, imageData, imageOptions);
@@ -1040,11 +1078,71 @@ class PresentationBuilder {
     }
     
     /**
-     * Set whether to use real images from Pexels
+     * Set whether to use real images from Pexels (backwards compatibility)
      * @param {boolean} useReal - Whether to use real images
      */
     setUseRealImages(useReal) {
         this.useRealImages = useReal;
+        // Map to new imageSource property
+        if (useReal) {
+            this.imageSource = 'pexels';
+        } else if (this.imageSource === 'pexels') {
+            this.imageSource = 'placeholder';
+        }
+    }
+    
+    /**
+     * Set the image source type
+     * @param {string} source - 'placeholder', 'pexels', or 'local'
+     */
+    setImageSource(source) {
+        this.imageSource = source;
+        // Update backwards compatibility flag
+        this.useRealImages = (source === 'pexels');
+    }
+    
+    /**
+     * Set local images for the presentation
+     * @param {Map} imagesMap - Map of slide index to image data
+     */
+    setLocalImages(imagesMap) {
+        this.localImagesMap = imagesMap || new Map();
+    }
+    
+    /**
+     * Add local image to slide
+     * @param {object} slide - PptxGenJS slide object
+     * @param {object} imageData - Local image data
+     * @param {object} options - Placement options
+     */
+    async addLocalImage(slide, imageData, options) {
+        const defaults = {
+            x: '5%',
+            y: '25%',
+            w: '90%',
+            h: '50%'
+        };
+        
+        const config = { ...defaults, ...options };
+        
+        try {
+            // Add the local image using base64 data
+            slide.addImage({
+                data: imageData.data,
+                x: config.x,
+                y: config.y,
+                w: config.w,
+                h: config.h,
+                altText: `Local image: ${imageData.filename || 'image'}`
+            });
+            
+            return true;
+        } catch (error) {
+            console.error('Error adding local image:', error);
+            // Fallback to placeholder
+            this.addImagePlaceholder(slide, options);
+            return false;
+        }
     }
     
     /**
