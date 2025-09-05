@@ -192,9 +192,9 @@ class App {
                 presentationBuilder.clearLogo();
             }
             
-            // Initialize presentation builder with the data and original prompt
+            // Initialize presentation builder with the data, original prompt, and language
             console.log('Initializing presentation with data:', presentationData);
-            presentationBuilder.initialize(presentationData, inputValues.prompt);
+            presentationBuilder.initialize(presentationData, inputValues.prompt, inputValues.language || 'en');
             
             // Generate preview
             const previews = presentationBuilder.generatePreviews();
