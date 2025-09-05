@@ -90,7 +90,7 @@ For maximum privacy, use:
 
 <p align="center">
   <img src="assets/images/3.Presentation_Settings.png" alt="Presentation Settings"><br>
-  <b>Presentation Configuration</b>
+  <b>Presentation Configuration [Complexity, Slides & Language]</b>
 </p>
 
 <p align="center">
@@ -388,7 +388,8 @@ prompt-2-powerpoint/
 │   ├── fileHandler.js  # PDF/text processing
 │   ├── presentationBuilder.js # PPTX generation
 │   ├── ui.js           # Interface management
-│   └── pexelsClient.js # Image API integration
+│   ├── pexelsClient.js # Image API integration
+│   └── localImageHandler.js # Local image folder management
 └── README.md           # This file
 ```
 
