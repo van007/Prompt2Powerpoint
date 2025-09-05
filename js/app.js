@@ -147,7 +147,8 @@ class App {
                     uiHandler.updateProgress(progress);
                 },
                 inputValues.imageLayout,
-                inputValues.useRealImages
+                inputValues.useRealImages,
+                inputValues.language || 'en'
             );
             
             // Set the selected theme
@@ -266,8 +267,11 @@ class App {
             // Get whether to use real images
             const useRealImages = uiHandler.getUseRealImages();
             
+            // Get current language setting
+            const language = uiHandler.elements.languageSelect ? uiHandler.elements.languageSelect.value : 'en';
+            
             // Generate the new slide using the API with context
-            const newSlideData = await apiClient.generateSingleSlide(title, description, complexity, context, imageLayout, useRealImages);
+            const newSlideData = await apiClient.generateSingleSlide(title, description, complexity, context, imageLayout, useRealImages, language);
             
             // Position mapping:
             // Position 0: After title slide = Insert at content index 0 (before first content slide)
