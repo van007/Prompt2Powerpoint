@@ -10,6 +10,7 @@ class UiHandler {
             complexitySelect: document.getElementById('complexity-select'),
             slidesSelect: document.getElementById('slides-select'),
             themeSelect: document.getElementById('theme-select'),
+            languageSelect: document.getElementById('language-select'),
             uploadArea: document.getElementById('upload-area'),
             fileInput: document.getElementById('file-input'),
             browseBtn: document.getElementById('browse-btn'),
@@ -116,6 +117,9 @@ class UiHandler {
         // Initialize logo settings
         this.initializeLogoSettings();
         
+        // Initialize language selection
+        this.initializeLanguageSelection();
+        
         // Store the insertion position for new slides
         this.slideInsertPosition = 0;
     }
@@ -198,6 +202,13 @@ class UiHandler {
         this.elements.themeSelect.addEventListener('change', () => {
             this.onThemeSelected();
         });
+        
+        // Language selection
+        if (this.elements.languageSelect) {
+            this.elements.languageSelect.addEventListener('change', () => {
+                this.onLanguageChanged();
+            });
+        }
         
         // Enter key in prompt input
         this.elements.promptInput.addEventListener('keypress', (e) => {
@@ -784,6 +795,7 @@ class UiHandler {
             slideCount: parseInt(this.elements.slidesSelect.value, 10),
             modelId: this.elements.modelSelect.value,
             theme: this.elements.themeSelect.value,
+            language: this.elements.languageSelect ? this.elements.languageSelect.value : 'en',
             imageLayout: this.getSelectedImageLayout(),
             useRealImages: this.getUseRealImages(), // Backwards compatibility
             imageSource: this.getImageSource(), // New property
@@ -1548,6 +1560,44 @@ class UiHandler {
             width: this.logoWidth,
             height: this.logoHeight
         };
+    }
+    
+    /**
+     * Initialize language selection
+     */
+    initializeLanguageSelection() {
+        if (!this.elements.languageSelect) return;
+        
+        // Load saved language preference
+        const savedLanguage = localStorage.getItem('presentation_language');
+        if (savedLanguage) {
+            this.elements.languageSelect.value = savedLanguage;
+        } else {
+            // Default to English
+            this.elements.languageSelect.value = 'en';
+            localStorage.setItem('presentation_language', 'en');
+        }
+    }
+    
+    /**
+     * Handle language selection change
+     */
+    onLanguageChanged() {
+        if (!this.elements.languageSelect) return;
+        
+        const selectedLanguage = this.elements.languageSelect.value;
+        localStorage.setItem('presentation_language', selectedLanguage);
+        
+        // Show info message about language change
+        const languageNames = {
+            'en': 'English',
+            'fr': 'French',
+            'de': 'German',
+            'es': 'Spanish',
+            'hi': 'Hindi'
+        };
+        
+        this.showInfo(`Language changed to ${languageNames[selectedLanguage]}. Your next presentation will be generated in ${languageNames[selectedLanguage]}.`);
     }
     
     /**

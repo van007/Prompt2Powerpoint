@@ -8,7 +8,7 @@
   <!-- Modern MIT License -->
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge&logo=opensourceinitiative&logoColor=white" alt="License: MIT">
   <!-- Version -->
-  <img src="https://img.shields.io/badge/Version-0.1.1-blue?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Version-0.1.2-blue?style=for-the-badge" alt="Version">
   <!-- JavaScript -->
   <img src="https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor" alt="JavaScript">
   <!-- HTML5 -->
@@ -42,6 +42,7 @@ A powerful AI-driven web application that generates professional PowerPoint pres
 ## 🚀 Key Features
 
 ### Core Functionality
+- **Multi-Language Support**: Generate presentations in English, French, German, Spanish, or Hindi (हिन्दी)
 - **Multi-Provider AI Generation**: Choose between local LLM servers or OpenRouter cloud API
 - **Privacy-First Options**: Keep your data completely private with local LLM processing
 - **Smart Context Understanding**: Upload PDF/text files for context-aware presentations
@@ -89,7 +90,7 @@ For maximum privacy, use:
 
 <p align="center">
   <img src="assets/images/3.Presentation_Settings.png" alt="Presentation Settings"><br>
-  <b>Presentation Configuration</b>
+  <b>Presentation Configuration [Complexity, Slides & Language]</b>
 </p>
 
 <p align="center">
@@ -199,6 +200,7 @@ For maximum privacy, use:
    - **Complexity**: Simple (basic), Standard (balanced), or Detailed (comprehensive)
    - **Slide Count**: 5-20 slides
    - **Theme**: Choose from 6 options including Custom
+   - **Language**: Select from English, French, German, Spanish, or Hindi
    - **Logo** (Optional): Upload PNG/JPG logo, choose position and size
    - **Model**: Select based on your provider
 
@@ -352,6 +354,13 @@ Logo: Company logo, Top Right position, Medium size
 
 ## 🌟 Latest Updates
 
+### September 5, 2025
+- **Multi-Language Support**: Generate presentations in 5 languages
+  - English, French, German, Spanish, and Hindi (हिन्दी with Devanagari script)
+  - Language preference saved in browser storage
+  - All content (titles, slides, bullet points, notes) generated in selected language
+  - Context-aware translations maintain presentation quality
+
 ### August 30, 2025
 - **Local Images Support**: Use images from your computer folder for presentations
   - Smart image matching based on filenames and slide titles
@@ -379,7 +388,8 @@ prompt-2-powerpoint/
 │   ├── fileHandler.js  # PDF/text processing
 │   ├── presentationBuilder.js # PPTX generation
 │   ├── ui.js           # Interface management
-│   └── pexelsClient.js # Image API integration
+│   ├── pexelsClient.js # Image API integration
+│   └── localImageHandler.js # Local image folder management
 └── README.md           # This file
 ```
 

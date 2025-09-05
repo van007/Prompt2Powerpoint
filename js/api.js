@@ -198,7 +198,7 @@ class ApiClient {
      * @param {function} onProgress 
      * @returns {Promise<object>}
      */
-    async generatePresentation(prompt, contexts = [], complexity = 'standard', slideCount = 10, onProgress, imageLayout = null, useRealImages = false) {
+    async generatePresentation(prompt, contexts = [], complexity = 'standard', slideCount = 10, onProgress, imageLayout = null, useRealImages = false, language = 'en') {
         if (!this.selectedModel) {
             throw new Error('No model selected');
         }
@@ -212,7 +212,34 @@ class ApiClient {
         
         try {
             // Build the system message with instructions
-            let systemMessage = `You are an expert presentation creator. 
+            let systemMessage = `You are an expert presentation creator.`;
+            
+            // Add language-specific instructions
+            const languageNames = {
+                'en': 'English',
+                'fr': 'French',
+                'de': 'German',
+                'es': 'Spanish',
+                'hi': 'Hindi (हिन्दी script)'
+            };
+            
+            const selectedLanguage = languageNames[language] || 'English';
+            
+            systemMessage += `
+            IMPORTANT: Generate the ENTIRE presentation in ${selectedLanguage}. 
+            This includes:
+            - The presentation title
+            - All slide titles
+            - All slide content and bullet points
+            - All speaker notes
+            - Any descriptions or text`;
+            
+            if (language === 'hi') {
+                systemMessage += `
+            For Hindi: Use Devanagari script (हिन्दी) for ALL text. Do NOT use romanized Hindi.`;
+            }
+            
+            systemMessage += `
             Create a professional ${complexity} presentation with exactly ${slideCount} slides based on the prompt.`;
             
             // Add image layout instructions if a layout is selected
@@ -288,7 +315,7 @@ class ApiClient {
                 - "imageDescription": ${useRealImages ? 'EXACTLY 2 words that combine presentation theme with slide topic' : 'A detailed description of an appropriate image for that slide'}`;
             }
             
-            systemMessage += `\n\nFormat your response as a JSON object with the following structure:
+            systemMessage += `\n\nIMPORTANT REMINDER: All text in your response MUST be in ${selectedLanguage}.\n\nFormat your response as a JSON object with the following structure:
             {
                 "title": "Presentation Title",
                 "slides": [
@@ -515,7 +542,7 @@ class ApiClient {
      * @param {object} context - Additional context for better generation
      * @returns {Promise<object>} - Generated slide data
      */
-    async generateSingleSlide(title, description = '', complexity = 'standard', context = {}, imageLayout = null, useRealImages = false) {
+    async generateSingleSlide(title, description = '', complexity = 'standard', context = {}, imageLayout = null, useRealImages = false, language = 'en') {
         if (!this.selectedModel) {
             throw new Error('No model selected');
         }
@@ -529,7 +556,30 @@ class ApiClient {
         
         try {
             // Build the system message for single slide generation
-            let systemMessage = `You are an expert presentation creator. Create a single professional ${complexity} slide that fits seamlessly into an existing presentation.`;
+            let systemMessage = `You are an expert presentation creator.`;
+            
+            // Add language-specific instructions
+            const languageNames = {
+                'en': 'English',
+                'fr': 'French',
+                'de': 'German',
+                'es': 'Spanish',
+                'hi': 'Hindi (हिन्दी script)'
+            };
+            
+            const selectedLanguage = languageNames[language] || 'English';
+            
+            systemMessage += `
+            IMPORTANT: Generate the slide content in ${selectedLanguage}.
+            This includes the slide title, all content, bullet points, and notes.`;
+            
+            if (language === 'hi') {
+                systemMessage += `
+            For Hindi: Use Devanagari script (हिन्दी) for ALL text. Do NOT use romanized Hindi.`;
+            }
+            
+            systemMessage += `
+            Create a single professional ${complexity} slide that fits seamlessly into an existing presentation.`;
             
             // Add image layout instructions if layouts are selected
             let jsonFormat = `{
