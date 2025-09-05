@@ -994,10 +994,16 @@ class PresentationBuilder {
             // Create closing slide
             this.createClosingSlide();
             
-            // Sanitize the title for the filename
-            const sanitizedTitle = this.presentationData.title
-                .replace(/[^a-z0-9]/gi, '_')
-                .toLowerCase();
+            // Sanitize the title for the filename - preserving Unicode characters
+            let sanitizedTitle = this.presentationData.title
+                .replace(/[^\p{L}\p{M}\p{N}\s\-]/gu, '_')  // Allow Unicode letters, marks (for combining chars), and numbers
+                .replace(/\s+/g, '_')  // Replace spaces with underscores
+                .trim();
+            
+            // Only apply toLowerCase for non-Hindi languages (Hindi doesn't have case distinction)
+            if (this.language !== 'hi') {
+                sanitizedTitle = sanitizedTitle.toLowerCase();
+            }
             
             const filename = `${sanitizedTitle}_prompt_2_powerpoint.pptx`;
             console.log(`Saving presentation as: ${filename}`);
