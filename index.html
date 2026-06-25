@@ -1,23 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prompt 2 Powerpoint</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Geist:wght@400..700&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="css/styles.css">
+    <script>
+        // Apply persisted theme before first paint to avoid a flash.
+        (function () {
+            try {
+                var saved = localStorage.getItem('p2p-theme');
+                document.documentElement.setAttribute('data-theme', saved === 'light' ? 'light' : 'dark');
+            } catch (e) { /* localStorage unavailable — keep default dark */ }
+        })();
+    </script>
 </head>
 <body>
+    <div aria-hidden class="bg-grid"></div>
+    <div aria-hidden class="bg-grain"></div>
+
     <header>
         <div class="logo">
             <img src="assets/icon.png" alt="Prompt 2 Powerpoint Logo" class="logo-icon">
             <h1>Prompt 2 Powerpoint</h1>
         </div>
         <div class="settings">
+            <button id="theme-toggle-btn" class="theme-toggle-btn" title="Toggle light and dark theme" aria-label="Toggle light and dark theme">
+                <svg class="theme-icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.4v2.6M12 19v2.6M21.6 12H19M5 12H2.4M18.8 5.2l-1.8 1.8M7 17l-1.8 1.8M18.8 18.8L17 17M7 7 5.2 5.2"/></svg>
+                <svg class="theme-icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.2A8.2 8.2 0 0 1 9.8 3.5a8.2 8.2 0 1 0 10.7 10.7Z"/></svg>
+            </button>
             <button id="settings-btn" class="settings-btn" title="Settings">
                 <i class="fas fa-cog"></i>
             </button>

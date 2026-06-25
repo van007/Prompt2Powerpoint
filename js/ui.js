@@ -36,6 +36,7 @@ class UiHandler {
             
             // Settings elements
             settingsBtn: document.getElementById('settings-btn'),
+            themeToggleBtn: document.getElementById('theme-toggle-btn'),
             urlSettingsModal: document.getElementById('url-settings-modal'),
             closeModalBtn: document.getElementById('close-modal'),
             urlForm: document.getElementById('url-form'),
@@ -221,6 +222,13 @@ class UiHandler {
         this.elements.settingsBtn.addEventListener('click', () => {
             this.openUrlSettingsModal();
         });
+
+        // Theme toggle - flip dark/light and persist
+        if (this.elements.themeToggleBtn) {
+            this.elements.themeToggleBtn.addEventListener('click', () => {
+                this.toggleTheme();
+            });
+        }
         
         // Close modal button
         this.elements.closeModalBtn.addEventListener('click', () => {
@@ -699,13 +707,28 @@ class UiHandler {
      * @param {string} message - Error message
      * @param {string} title - Error title
      */
+    /**
+     * Toggle between dark and light themes and persist the choice.
+     */
+    toggleTheme() {
+        const root = document.documentElement;
+        const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        root.setAttribute('data-theme', next);
+        try {
+            localStorage.setItem('p2p-theme', next);
+        } catch (e) {
+            // localStorage unavailable — theme still applies for this session.
+        }
+    }
+
     showError(message, title = 'Error') {
         Swal.fire({
             title: title,
             text: message,
             icon: 'error',
             confirmButtonText: 'OK',
-            confirmButtonColor: '#2D5BFF'
+            confirmButtonColor: '#ff5d2e',
+            customClass: { popup: 'p2p-swal' }
         });
     }
 
@@ -720,7 +743,8 @@ class UiHandler {
             text: message,
             icon: 'success',
             confirmButtonText: 'OK',
-            confirmButtonColor: '#2D5BFF'
+            confirmButtonColor: '#ff5d2e',
+            customClass: { popup: 'p2p-swal' }
         });
     }
 
@@ -732,6 +756,7 @@ class UiHandler {
         Swal.fire({
             title: message,
             allowOutsideClick: false,
+            customClass: { popup: 'p2p-swal' },
             didOpen: () => {
                 Swal.showLoading();
             }
@@ -1265,7 +1290,8 @@ class UiHandler {
                 </div>
             `,
             confirmButtonText: 'Close',
-            confirmButtonColor: '#2D5BFF',
+            confirmButtonColor: '#ff5d2e',
+            customClass: { popup: 'p2p-swal' },
             width: '600px'
         });
     }
@@ -1609,7 +1635,9 @@ class UiHandler {
             icon: 'warning',
             title: 'Warning',
             text: message,
-            confirmButtonText: 'OK'
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#ff5d2e',
+            customClass: { popup: 'p2p-swal' }
         });
     }
     
@@ -1623,7 +1651,8 @@ class UiHandler {
             title: 'Info',
             text: message,
             timer: 2000,
-            showConfirmButton: false
+            showConfirmButton: false,
+            customClass: { popup: 'p2p-swal' }
         });
     }
 }
